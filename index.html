@@ -42,6 +42,8 @@
       text-decoration: none;
       margin-top: 20px;
       display: inline-block;
+      border: none;
+      cursor: pointer;
     }
 
     input, textarea {
@@ -50,6 +52,7 @@
       margin: 10px 0;
       border-radius: 8px;
       border: none;
+      box-sizing: border-box;
     }
 
     .container {
@@ -79,16 +82,51 @@
   <h2>Contato</h2>
 
   <div class="container">
-    <form>
-      <input placeholder="Nome">
-      <input placeholder="Email">
-      <input placeholder="Telefone">
-      <input placeholder="Tipo de vaga">
-      <textarea placeholder="Mensagem"></textarea>
-      <button class="btn">Enviar</button>
+    <form id="contactForm">
+      <input name="name" placeholder="Nome" required>
+      <input name="email" type="email" placeholder="Email" required>
+      <input name="phone" placeholder="Telefone">
+      <input name="job_type" placeholder="Tipo de vaga" required>
+      <textarea name="message" placeholder="Mensagem"></textarea>
+      <button class="btn" type="submit">Enviar</button>
     </form>
   </div>
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
+  const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+
+  const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+  const form = document.getElementById("contactForm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      name: form.name.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      job_type: form.job_type.value,
+      message: form.message.value
+    };
+
+    const { error } = await client
+      .from("contacts")
+      .insert([data]);
+
+    if (error) {
+      alert("Erro ao enviar. Verifique o Supabase.");
+      console.log(error);
+    } else {
+      alert("Contato enviado com sucesso!");
+      form.reset();
+    }
+  });
+</script>
 
 </body>
 </html>
