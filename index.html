@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Maxy Tedesco | Portfólio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #020617;
+      color: white;
+    }
+
+    section {
+      padding: 100px 20px;
+      text-align: center;
+    }
+
+    .hero {
+      height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
+      url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 50px;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      background: #22d3ee;
+      color: black;
+      border-radius: 10px;
+      text-decoration: none;
+      margin-top: 20px;
+      display: inline-block;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+<section class="hero">
+  <h1>Maxy Tedesco</h1>
+  <h2>Soluções que geram resultados</h2>
+  <a href="#contato" class="btn">Entrar em contato</a>
+</section>
+
+<section>
+  <h2>Sobre mim</h2>
+  <p>
+    Profissional de tecnologia com experiência em suporte, sistemas e SQL Server.
+    Atualmente focado em análise de dados e inteligência artificial.
+  </p>
+</section>
+
+<section id="contato">
+  <h2>Contato</h2>
+
+  <div class="container">
+    <form>
+      <input placeholder="Nome">
+      <input placeholder="Email">
+      <input placeholder="Telefone">
+      <input placeholder="Tipo de vaga">
+      <textarea placeholder="Mensagem"></textarea>
+      <button class="btn">Enviar</button>
+    </form>
+  </div>
+</section>
+
+</body>
+</html>
