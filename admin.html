@@ -148,84 +148,154 @@
 
 <script>
 const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
-const supabaseKey = "SUA_PUBLIC_KEY";
+const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 
 const client = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-const tableBody = document.getElementById("tableBody");
-const searchInput = document.getElementById("search");
-const filterSelect = document.getElementById("filter");
+const loginBox = document.getElementById("loginBox");
+const adminPanel = document.getElementById("adminPanel");
+const table = document.getElementById("contactsTable");
+const errorBox = document.getElementById("error");
 
 let contacts = [];
 
-// 🔹 carregar dados iniciais
+async function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { error } = await client.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    errorBox.innerText = "Login inválido. Verifique e-mail e senha.";
+    return;
+  }
+
+  loginBox.style.display = "none";
+  adminPanel.style.display = "block";
+  await loadContacts();
+}
+
+async function logout() {
+  await client.auth.signOut();
+  window.location.reload();
+}
+
+async function checkSession() {
+  const { data } = await client.auth.getSession();
+
+  if (data.session) {
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
+    await loadContacts();
+  }
+}
+
 async function loadContacts() {
-  const { data } = await client
+  const { data, error } = await client
     .from("contacts")
     .select("*")
     .order("created_at", { ascending: false });
 
+  if (error) {
+    table.innerHTML = `<tr><td colspan="6">Erro: ${error.message}</td></tr>`;
+    return;
+  }
+
   contacts = data || [];
-  renderTable();
+
+  populateFilter();
+  renderContacts();
 }
 
-// 🔹 renderizar tabela
-function renderTable() {
-  const search = searchInput.value.toLowerCase();
-  const filter = filterSelect.value;
+function populateFilter() {
+  const filter = document.getElementById("filter");
+  const currentValue = filter.value;
+
+  const jobTypes = [...new Set(
+    contacts
+      .map(c => c.job_type)
+      .filter(Boolean)
+  )];
+
+  filter.innerHTML = `<option value="">Todas as vagas</option>`;
+
+  jobTypes.forEach(type => {
+    const option = document.createElement("option");
+    option.value = type;
+    option.textContent = type;
+    filter.appendChild(option);
+  });
+
+  filter.value = currentValue;
+}
+
+function renderContacts() {
+  const search = document.getElementById("search").value.toLowerCase();
+  const selectedJob = document.getElementById("filter").value;
 
   const filtered = contacts.filter(c => {
-    const matchSearch =
-      c.name?.toLowerCase().includes(search) ||
-      c.email?.toLowerCase().includes(search);
+    const name = (c.name || "").toLowerCase();
+    const email = (c.email || "").toLowerCase();
+    const job = c.job_type || "";
 
-    const matchFilter =
-      filter === "Todos" || c.job_type === filter;
+    const matchesSearch =
+      name.includes(search) ||
+      email.includes(search);
 
-    return matchSearch && matchFilter;
+    const matchesJob =
+      selectedJob === "" ||
+      job === selectedJob;
+
+    return matchesSearch && matchesJob;
   });
 
-  tableBody.innerHTML = "";
+  if (filtered.length === 0) {
+    table.innerHTML = `<tr><td colspan="6">Nenhum contato encontrado.</td></tr>`;
+    return;
+  }
 
-  filtered.forEach(c => {
-    const row = `
-      <tr>
-        <td>${new Date(c.created_at).toLocaleString()}</td>
-        <td>${c.name}</td>
-        <td>${c.email}</td>
-        <td>${c.phone}</td>
-        <td>${c.job_type}</td>
-        <td>${c.message}</td>
-      </tr>
-    `;
-    tableBody.innerHTML += row;
-  });
+  table.innerHTML = filtered.map(c => `
+    <tr>
+      <td>${c.created_at ? new Date(c.created_at).toLocaleString("pt-BR") : ""}</td>
+      <td>${c.name || ""}</td>
+      <td>${c.email || ""}</td>
+      <td>${c.phone || ""}</td>
+      <td>${c.job_type || ""}</td>
+      <td>${c.message || ""}</td>
+    </tr>
+  `).join("");
 }
 
-// 🔹 realtime (a mágica acontece aqui)
-client
-  .channel('realtime-contacts')
-  .on(
-    'postgres_changes',
-    { event: '*', schema: 'public', table: 'contacts' },
-    (payload) => {
-      console.log("Mudança em tempo real:", payload);
+function exportCSV() {
+  if (!contacts.length) {
+    alert("Não há contatos para exportar.");
+    return;
+  }
 
-      if (payload.eventType === "INSERT") {
-        contacts.unshift(payload.new);
-      }
+  let csv = "Data,Nome,Email,Telefone,Tipo de vaga,Mensagem\n";
 
-      renderTable();
-    }
-  )
-  .subscribe();
+  contacts.forEach(c => {
+    csv += `"${c.created_at ? new Date(c.created_at).toLocaleString("pt-BR") : ""}","${c.name || ""}","${c.email || ""}","${c.phone || ""}","${c.job_type || ""}","${c.message || ""}"\n`;
+  });
 
-// 🔹 eventos
-searchInput.addEventListener("input", renderTable);
-filterSelect.addEventListener("change", renderTable);
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
 
-// iniciar
-loadContacts();
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "contatos_portfolio.csv";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById("search").addEventListener("input", renderContacts);
+document.getElementById("filter").addEventListener("change", renderContacts);
+
+checkSession();
 </script>
 
 </body>
