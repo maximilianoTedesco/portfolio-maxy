@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <title>Maxy Tedesco | Portfolio</title>
@@ -16,10 +16,6 @@
       font-family: Arial, Helvetica, sans-serif;
       background: #020617;
       color: #ffffff;
-    }
-
-    a {
-      color: inherit;
     }
 
     .admin-btn {
@@ -47,176 +43,97 @@
       padding: 90px 20px;
     }
 
+    /* HERO COM SUA IMAGEM */
     .hero {
       min-height: 100vh;
       background:
-        linear-gradient(rgba(2, 6, 23, 0.75), rgba(2, 6, 23, 0.9)),
-        url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1920");
+        linear-gradient(rgba(2, 6, 23, 0.65), rgba(2, 6, 23, 0.85)),
+        url("hero.jpg");
       background-size: cover;
-      background-position: center;
+      background-position: center right;
       display: flex;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 20px;
+      justify-content: flex-start;
+      padding: 40px;
     }
 
     .hero-content {
-      max-width: 900px;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(34, 211, 238, 0.12);
-      color: #67e8f9;
-      border: 1px solid rgba(34, 211, 238, 0.35);
-      font-weight: bold;
-      margin-bottom: 20px;
+      max-width: 600px;
+      margin-left: 80px;
     }
 
     h1 {
-      font-size: clamp(42px, 7vw, 76px);
-      margin: 0 0 16px;
-      line-height: 1;
+      font-size: 60px;
+      margin-bottom: 10px;
     }
 
     h2 {
-      font-size: clamp(28px, 4vw, 42px);
-      margin: 0 0 18px;
-    }
-
-    h3 {
-      color: #67e8f9;
-      margin-top: 0;
-    }
-
-    p {
+      font-size: 28px;
+      margin-bottom: 20px;
       color: #cbd5e1;
-      line-height: 1.7;
-      font-size: 17px;
-    }
-
-    .hero p {
-      font-size: 20px;
-      max-width: 760px;
-      margin: 0 auto;
     }
 
     .btn {
-      padding: 15px 28px;
+      padding: 15px 30px;
       background: #22d3ee;
-      color: #020617;
-      border-radius: 999px;
+      color: black;
+      border-radius: 10px;
       text-decoration: none;
-      margin-top: 28px;
+      margin-top: 20px;
       display: inline-block;
       border: none;
       cursor: pointer;
       font-weight: bold;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(34, 211, 238, 0.25);
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: auto;
-    }
-
-    .center {
-      text-align: center;
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-      margin-top: 36px;
+      gap: 20px;
     }
 
     .card {
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.75));
-      padding: 30px;
-      border-radius: 22px;
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(34, 211, 238, 0.4);
-    }
-
-    .about-box {
-      max-width: 850px;
-      margin: auto;
-      background: rgba(15, 23, 42, 0.65);
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      padding: 34px;
-      border-radius: 24px;
-      text-align: center;
+      background: #0f172a;
+      padding: 25px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.05);
     }
 
     .contact-wrapper {
       display: grid;
-      grid-template-columns: 1fr 1.2fr;
+      grid-template-columns: 1fr 1fr;
       gap: 30px;
-      align-items: start;
-      margin-top: 36px;
     }
 
     form {
-      background: rgba(15, 23, 42, 0.9);
-      padding: 30px;
-      border-radius: 24px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: #0f172a;
+      padding: 25px;
+      border-radius: 16px;
     }
 
-    input,
-    textarea {
+    input, textarea {
       width: 100%;
-      padding: 15px;
-      margin: 9px 0;
-      border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      background: #020617;
-      color: #ffffff;
-      font-size: 16px;
-      outline: none;
-    }
-
-    input:focus,
-    textarea:focus {
-      border-color: #22d3ee;
-      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12);
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
     }
 
     textarea {
-      min-height: 130px;
-      resize: vertical;
+      min-height: 120px;
     }
 
     .message-box {
       display: none;
-      margin-top: 18px;
-      padding: 14px;
-      border-radius: 12px;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
       font-weight: bold;
-      text-align: center;
     }
 
     .success {
@@ -234,21 +151,25 @@
     }
 
     footer {
-      padding: 30px 20px;
       text-align: center;
+      padding: 20px;
       color: #94a3b8;
-      border-top: 1px solid rgba(148, 163, 184, 0.12);
     }
 
+    /* RESPONSIVO */
     @media (max-width: 850px) {
       .grid,
       .contact-wrapper {
         grid-template-columns: 1fr;
       }
 
-      .admin-btn {
-        top: 14px;
-        right: 14px;
+      .hero {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .hero-content {
+        margin-left: 0;
       }
     }
   </style>
@@ -260,81 +181,37 @@
 
   <section class="hero">
     <div class="hero-content">
-      <div class="badge">Technology • Data • AI • Support</div>
-      <h1>Maxy Tedesco</h1>
-      <p>
-        Technology professional focused on user support, systems, SQL Server,
-        ERP environments, data analysis and AI-based business solutions.
-      </p>
-      <a href="#contact" class="btn">Get in Touch</a>
+      <h1>Soluções que geram resultados</h1>
+      <h2>Transformando tecnologia em resultados reais</h2>
+      <a href="#contact" class="btn">Entrar em contato</a>
     </div>
   </section>
 
   <section>
     <div class="container">
-      <div class="about-box">
-        <h2>About Me</h2>
-        <p>
-          I work with technology, support, systems analysis, database routines
-          and process improvement. My focus is to solve problems with clarity,
-          organization and practical solutions that generate real results.
-        </p>
-      </div>
+      <h2>Sobre mim</h2>
+      <p>
+        Profissional de tecnologia com experiência em suporte, SQL Server,
+        análise de dados e soluções com inteligência artificial.
+      </p>
     </div>
   </section>
 
   <section>
-    <div class="container center">
-      <h2>Core Skills</h2>
-      <p>Areas where I can contribute with technical and business-oriented solutions.</p>
-
+    <div class="container">
+      <h2>Habilidades</h2>
       <div class="grid">
         <div class="card">
-          <h3>User Support</h3>
-          <p>
-            Technical support, issue analysis, troubleshooting and communication
-            with users and teams.
-          </p>
+          <h3>Suporte</h3>
+          <p>Atendimento, troubleshooting e análise de problemas.</p>
         </div>
-
         <div class="card">
           <h3>SQL Server</h3>
-          <p>
-            Experience with queries, database support, ERP adjustments and
-            data validation.
-          </p>
+          <p>Consultas, ERP e banco de dados.</p>
         </div>
-
         <div class="card">
-          <h3>Artificial Intelligence</h3>
-          <p>
-            Automation, AI tools, workflow optimization and productivity-focused
-            solutions.
-          </p>
-        </div>
-
-        <div class="card">
-          <h3>Data Analysis</h3>
-          <p>
-            Data organization, interpretation and support for better business
-            decisions.
-          </p>
-        </div>
-
-        <div class="card">
-          <h3>ERP Systems</h3>
-          <p>
-            Operational experience with system routines, support and process
-            improvements.
-          </p>
-        </div>
-
-        <div class="card">
-          <h3>Problem Solving</h3>
-          <p>
-            Analytical mindset, fast learning and continuous improvement applied
-            to real business needs.
-          </p>
+          <h3>Inteligência Artificial</h3>
+          <p>Automação e soluções inteligentes.</p>
         </div>
       </div>
     </div>
@@ -342,32 +219,21 @@
 
   <section id="contact">
     <div class="container">
-      <div class="center">
-        <h2>Interested in My Profile?</h2>
-        <p>Leave your contact details and opportunity information.</p>
-      </div>
+      <h2>Contato</h2>
 
       <div class="contact-wrapper">
-        <div class="card">
-          <h3>Professional Contact</h3>
-          <p>
-            Use the form to send opportunities, project invitations or
-            professional messages.
-          </p>
-          <p>
-            Your message will be stored securely and I will receive a notification.
-          </p>
+        <div>
+          <p>Envie sua proposta ou oportunidade.</p>
         </div>
 
         <form id="contactForm">
-          <input name="name" placeholder="Name" required />
+          <input name="name" placeholder="Nome" required />
           <input name="email" type="email" placeholder="Email" required />
-          <input name="phone" placeholder="Phone / WhatsApp" />
-          <input name="job_type" placeholder="Type of opportunity" required />
-          <textarea name="message" placeholder="Message"></textarea>
+          <input name="phone" placeholder="Telefone" />
+          <input name="job_type" placeholder="Tipo de oportunidade" required />
+          <textarea name="message" placeholder="Mensagem"></textarea>
 
-          <button id="submitBtn" class="btn" type="submit">Send Contact</button>
-
+          <button id="submitBtn" class="btn" type="submit">Enviar</button>
           <div id="formMessage" class="message-box"></div>
         </form>
       </div>
@@ -375,7 +241,7 @@
   </section>
 
   <footer>
-    © 2026 Maxy Tedesco. All rights reserved.
+    © 2026 Maxy Tedesco
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -399,55 +265,35 @@
       e.preventDefault();
 
       submitBtn.disabled = true;
-      submitBtn.innerText = "Sending...";
-      formMessage.className = "message-box";
-      formMessage.innerText = "";
+      submitBtn.innerText = "Enviando...";
 
       const data = {
-        name: form.name.value.trim(),
-        email: form.email.value.trim(),
-        phone: form.phone.value.trim(),
-        job_type: form.job_type.value.trim(),
-        message: form.message.value.trim()
+        name: form.name.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        job_type: form.job_type.value,
+        message: form.message.value
       };
 
-      const { error } = await client
-        .from("contacts")
-        .insert([data]);
+      const { error } = await client.from("contacts").insert([data]);
 
       if (error) {
-        console.error("Supabase error:", error);
-        showMessage("error", "Error saving contact. Please try again.");
+        showMessage("error", "Erro ao salvar contato.");
         submitBtn.disabled = false;
-        submitBtn.innerText = "Send Contact";
+        submitBtn.innerText = "Enviar";
         return;
       }
 
-      try {
-        const emailResponse = await fetch("/api/send-email", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+      });
 
-        if (!emailResponse.ok) {
-          showMessage("error", "Contact saved, but email notification failed.");
-          submitBtn.disabled = false;
-          submitBtn.innerText = "Send Contact";
-          return;
-        }
-
-        form.reset();
-        showMessage("success", "Contact sent successfully. I will get back to you soon!");
-      } catch (err) {
-        console.error("Email API error:", err);
-        showMessage("error", "Contact saved, but email notification failed.");
-      }
-
+      form.reset();
+      showMessage("success", "Mensagem enviada com sucesso!");
       submitBtn.disabled = false;
-      submitBtn.innerText = "Send Contact";
+      submitBtn.innerText = "Enviar";
     });
   </script>
 
