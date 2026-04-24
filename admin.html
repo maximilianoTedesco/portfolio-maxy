@@ -32,6 +32,7 @@
       padding: 14px;
       border-bottom: 1px solid #334155;
       text-align: left;
+      vertical-align: top;
     }
 
     th {
@@ -42,13 +43,45 @@
     tr:hover {
       background: #1e293b;
     }
+
+    .denied {
+      color: #ff6b6b;
+      font-size: 32px;
+      margin-top: 80px;
+      text-align: center;
+    }
+
+    .logout {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 
 <body>
 
+<script>
+  const ADMIN_USER = "maxytedesco";
+  const ADMIN_PASSWORD = "050118";
+
+  const user = prompt("Digite o usuário do administrador:");
+  const password = prompt("Digite a senha do administrador:");
+
+  if (user !== ADMIN_USER || password !== ADMIN_PASSWORD) {
+    document.body.innerHTML = '<h1 class="denied">Acesso negado</h1>';
+    throw new Error("Acesso negado");
+  }
+</script>
+
 <h1>Painel Administrativo</h1>
 <p>Contatos recebidos pelo portfólio.</p>
+
+<button class="logout" onclick="window.location.href='index.html'">Sair</button>
 
 <table>
   <thead>
