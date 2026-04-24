@@ -7,6 +7,19 @@
 
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #020617; color: white; }
+    .admin-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #22d3ee;
+      padding: 10px 16px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      z-index: 999;
+      border: 1px solid #22d3ee;
+    }
     section { padding: 100px 20px; text-align: center; }
     .hero {
       height: 100vh;
@@ -54,6 +67,8 @@
 </head>
 
 <body>
+
+<a href="admin.html" class="admin-btn">Admin</a>
 
 <section class="hero">
   <h1>Maxy Tedesco</h1>
@@ -130,7 +145,6 @@
 
     if (error) {
       alert("Error sending contact: " + error.message);
-      console.log(error);
     } else {
       alert("Contact sent successfully!");
       form.reset();
