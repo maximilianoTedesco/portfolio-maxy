@@ -38,6 +38,9 @@ th { background:#111827; color:#fff; }
 .lido { background:orange; }
 .respondido { background:green; }
 
+.btn-ver { background:#2563eb; }
+.btn-excluir { background:#dc2626; margin-top:6px; }
+
 .modal {
   display:none;
   position:fixed;
@@ -68,7 +71,7 @@ th { background:#111827; color:#fff; }
 
   <div class="top">
     <h1>Painel de Mensagens</h1>
-    <button onclick="logout()">Sair</button>
+    <button onclick="logout()" style="background:#dc2626;">Sair</button>
   </div>
 
   <input id="busca" placeholder="Buscar..." oninput="filtrar()">
@@ -88,6 +91,7 @@ th { background:#111827; color:#fff; }
   <div class="modal-box" onclick="event.stopPropagation()">
     <h3>Mensagem</h3>
     <p id="textoModal"></p>
+    <button onclick="fecharModal()">Fechar</button>
   </div>
 </div>
 
@@ -103,8 +107,8 @@ let dados = [];
 
 function login(){
   if(document.getElementById("senha").value === ADMIN_PASSWORD){
-    document.getElementById("login").style.display="none";
-    document.getElementById("admin").style.display="block";
+    document.getElementById("login").style.display = "none";
+    document.getElementById("admin").style.display = "block";
     carregar();
   } else {
     alert("Senha incorreta");
@@ -124,11 +128,11 @@ async function carregar(){
 
   if(error){
     console.log(error);
-    document.getElementById("conteudo").innerHTML="Erro ao carregar";
+    document.getElementById("conteudo").innerHTML = "Erro ao carregar mensagens";
     return;
   }
 
-  dados = data;
+  dados = data || [];
   render(dados);
 }
 
@@ -139,10 +143,17 @@ function filtrar(){
 
   let filtrado = dados.filter(m => {
 
-    let texto = (m.name + m.email + m.phone + m.message).toLowerCase();
+    let texto = (
+      (m.name || "") +
+      (m.email || "") +
+      (m.phone || "") +
+      (m.message || "")
+    ).toLowerCase();
+
+    let statusAtual = m.status || "novo";
 
     let okBusca = texto.includes(busca);
-    let okStatus = filtro === "todos" || m.status === filtro;
+    let okStatus = filtro === "todos" || statusAtual === filtro;
 
     return okBusca && okStatus;
   });
@@ -153,32 +164,44 @@ function filtrar(){
 function render(lista){
 
   if(lista.length === 0){
-    document.getElementById("conteudo").innerHTML="Sem mensagens";
+    document.getElementById("conteudo").innerHTML = "Sem mensagens";
     return;
   }
 
-  let html = "<table><tr><th>Nome</th><th>Email</th><th>Status</th><th>Ação</th></tr>";
+  let html = `
+    <table>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+  `;
 
   lista.forEach(m => {
 
     let status = m.status || "novo";
+    let nome = m.name || "-";
+    let email = m.email || "-";
+    let mensagem = m.message || "-";
 
     html += `
       <tr>
-        <td>${m.name}</td>
-        <td>${m.email}</td>
+        <td>${nome}</td>
+        <td>${email}</td>
 
         <td>
           <span class="status ${status}">${status}</span>
           <select onchange="mudarStatus('${m.id}', this.value)">
-            <option ${status=="novo"?"selected":""}>novo</option>
-            <option ${status=="lido"?"selected":""}>lido</option>
-            <option ${status=="respondido"?"selected":""}>respondido</option>
+            <option value="novo" ${status=="novo"?"selected":""}>novo</option>
+            <option value="lido" ${status=="lido"?"selected":""}>lido</option>
+            <option value="respondido" ${status=="respondido"?"selected":""}>respondido</option>
           </select>
         </td>
 
         <td>
-          <button onclick="abrir('${m.id}', \`${m.message}\`)">Ver</button>
+          <button class="btn-ver" onclick="abrir('${m.id}', \`${mensagem}\`)">Ver</button>
+          <button class="btn-excluir" onclick="excluir('${m.id}')">Excluir</button>
         </td>
       </tr>
     `;
@@ -191,26 +214,44 @@ function render(lista){
 
 async function mudarStatus(id, status){
 
-  await supabaseClient
+  const { error } = await supabaseClient
     .from("contacts")
-    .update({ status })
+    .update({ status: status })
     .eq("id", id);
 
-  carregar();
+  if(error){
+    alert("Erro ao atualizar status");
+    console.log(error);
+    return;
+  }
+
+  dados = dados.map(item => {
+    if(String(item.id) === String(id)){
+      return { ...item, status: status };
+    }
+    return item;
+  });
+
+  filtrar();
 }
 
 async function abrir(id, msg){
 
   document.getElementById("textoModal").innerText = msg;
-  document.getElementById("modal").style.display="flex";
+  document.getElementById("modal").style.display = "flex";
 
-  await supabaseClient
+  const { error } = await supabaseClient
     .from("contacts")
     .update({ status: "lido" })
     .eq("id", id);
 
+  if(error){
+    console.log(error);
+    return;
+  }
+
   dados = dados.map(item => {
-    if (String(item.id) === String(id)) {
+    if(String(item.id) === String(id)){
       return { ...item, status: "lido" };
     }
     return item;
@@ -219,8 +260,29 @@ async function abrir(id, msg){
   filtrar();
 }
 
+async function excluir(id){
+
+  const confirmar = confirm("Tem certeza que deseja excluir esta mensagem?");
+
+  if(!confirmar) return;
+
+  const { error } = await supabaseClient
+    .from("contacts")
+    .delete()
+    .eq("id", id);
+
+  if(error){
+    alert("Erro ao excluir. Verifique a policy DELETE no Supabase.");
+    console.log(error);
+    return;
+  }
+
+  dados = dados.filter(item => String(item.id) !== String(id));
+  filtrar();
+}
+
 function fecharModal(){
-  document.getElementById("modal").style.display="none";
+  document.getElementById("modal").style.display = "none";
 }
 
 </script>
