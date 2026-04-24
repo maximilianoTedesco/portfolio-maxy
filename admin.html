@@ -84,7 +84,7 @@
     const { data, error } = await client
       .from("contacts")
       .select("*")
-      .order("criado_em", { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (error) {
       table.innerHTML = `
@@ -107,7 +107,7 @@
 
     table.innerHTML = data.map(c => `
       <tr>
-        <td>${c.criado_em ? new Date(c.criado_em).toLocaleString("pt-BR") : ""}</td>
+        <td>${c.created_at ? new Date(c.created_at).toLocaleString("pt-BR") : ""}</td>
         <td>${c.name || ""}</td>
         <td>${c.email || ""}</td>
         <td>${c.phone || ""}</td>
