@@ -43,7 +43,7 @@
       color: #38bdf8;
     }
 
-    input, textarea, button {
+    input, button {
       width: 100%;
       padding: 12px;
       margin-bottom: 12px;
@@ -52,7 +52,7 @@
       font-size: 15px;
     }
 
-    input, textarea {
+    input {
       background: #1e293b;
       color: #fff;
       border: 1px solid #334155;
@@ -75,10 +75,6 @@
       max-width: 150px;
     }
 
-    .logout:hover {
-      background: #dc2626;
-    }
-
     .hidden {
       display: none;
     }
@@ -87,47 +83,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 25px;
-      gap: 15px;
+      margin-bottom: 20px;
     }
 
     .message {
       background: #1e293b;
       border: 1px solid #334155;
-      padding: 18px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-
-    .message p {
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
-
-    .message strong {
-      color: #38bdf8;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
     }
 
     .status {
       margin-top: 10px;
       color: #facc15;
-      font-size: 14px;
-    }
-
-    .empty {
-      color: #94a3b8;
-      margin-top: 20px;
-    }
-
-    @media (max-width: 600px) {
-      .topbar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .logout {
-        max-width: 100%;
-      }
     }
   </style>
 </head>
@@ -139,35 +108,34 @@
     <div id="loginBox" class="card">
       <h1>Login Admin</h1>
 
-      <input type="email" id="email" placeholder="E-mail" autocomplete="email" />
-      <input type="password" id="password" placeholder="Senha" autocomplete="current-password" />
+      <input type="email" id="email" placeholder="E-mail" />
+      <input type="password" id="password" placeholder="Senha" />
 
       <button id="loginBtn">Entrar</button>
-
       <p id="loginStatus" class="status"></p>
     </div>
 
     <!-- PAINEL -->
     <div id="adminBox" class="card hidden">
       <div class="topbar">
-        <h2>Mensagens recebidas</h2>
+        <h2>Mensagens</h2>
         <button id="logoutBtn" class="logout">Sair</button>
       </div>
 
-      <button id="refreshBtn">Atualizar mensagens</button>
-
+      <button id="refreshBtn">Atualizar</button>
       <div id="messagesList"></div>
     </div>
 
   </div>
 
   <script>
+    // ✅ CONFIG CORRETA
     const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
     const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 
-    const TABLE_NAME = "message";
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const TABLE_NAME = "message";
 
     const loginBox = document.getElementById("loginBox");
     const adminBox = document.getElementById("adminBox");
@@ -189,13 +157,7 @@
     }
 
     async function checkSession() {
-      const { data, error } = await supabaseClient.auth.getSession();
-
-      if (error) {
-        console.error(error);
-        showLogin();
-        return;
-      }
+      const { data } = await supabaseClient.auth.getSession();
 
       if (data.session) {
         showAdmin();
@@ -205,36 +167,22 @@
     }
 
     loginBtn.addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-      loginStatus.textContent = "";
-
-      if (!email || !password) {
-        loginStatus.textContent = "Informe o e-mail e a senha.";
-        return;
-      }
-
-      loginBtn.textContent = "Entrando...";
-      loginBtn.disabled = true;
+      loginStatus.textContent = "Entrando...";
 
       const { data, error } = await supabaseClient.auth.signInWithPassword({
         email,
         password
       });
 
-      loginBtn.textContent = "Entrar";
-      loginBtn.disabled = false;
-
       if (error) {
-        console.error(error);
-        loginStatus.textContent = "Erro no login: " + error.message;
+        loginStatus.textContent = "Erro: " + error.message;
         return;
       }
 
-      if (data.session) {
-        showAdmin();
-      }
+      showAdmin();
     });
 
     logoutBtn.addEventListener("click", async () => {
@@ -242,12 +190,10 @@
       showLogin();
     });
 
-    refreshBtn.addEventListener("click", () => {
-      loadMessages();
-    });
+    refreshBtn.addEventListener("click", loadMessages);
 
     async function loadMessages() {
-      messagesList.innerHTML = "<p class='empty'>Carregando mensagens...</p>";
+      messagesList.innerHTML = "Carregando...";
 
       const { data, error } = await supabaseClient
         .from(TABLE_NAME)
@@ -255,41 +201,27 @@
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error(error);
-        messagesList.innerHTML = "<p class='empty'>Erro ao carregar mensagens: " + error.message + "</p>";
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        messagesList.innerHTML = "<p class='empty'>Nenhuma mensagem encontrada.</p>";
+        messagesList.innerHTML = "Erro ao carregar";
         return;
       }
 
       messagesList.innerHTML = "";
 
-      data.forEach((msg) => {
+      data.forEach(msg => {
         const div = document.createElement("div");
         div.className = "message";
-
         div.innerHTML = `
-          <p><strong>Nome:</strong> ${msg.name || "Não informado"}</p>
-          <p><strong>E-mail:</strong> ${msg.email || "Não informado"}</p>
-          <p><strong>Telefone:</strong> ${msg.phone || "Não informado"}</p>
-          <p><strong>Serviço:</strong> ${msg.job_type || "Não informado"}</p>
-          <p><strong>Mensagem:</strong> ${msg.message || "Sem mensagem"}</p>
-          <p><strong>Data:</strong> ${msg.created_at ? new Date(msg.created_at).toLocaleString("pt-BR") : "Sem data"}</p>
+          <p><strong>Nome:</strong> ${msg.name}</p>
+          <p><strong>Email:</strong> ${msg.email}</p>
+          <p><strong>Mensagem:</strong> ${msg.message}</p>
         `;
-
         messagesList.appendChild(div);
       });
     }
 
     supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        showAdmin();
-      } else {
-        showLogin();
-      }
+      if (session) showAdmin();
+      else showLogin();
     });
 
     checkSession();
