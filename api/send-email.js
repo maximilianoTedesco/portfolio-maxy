@@ -14,7 +14,8 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         from: "Portfolio <onboarding@resend.dev>",
-        to: ["SEU_EMAIL_AQUI"],
+        to: ["portifoliomaxytedesco@gmail.com
+"],
         subject: "Novo contato recebido pelo portfólio",
         html: `
           <h2>Novo contato recebido</h2>
