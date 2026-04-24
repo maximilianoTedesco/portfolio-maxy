@@ -4,101 +4,58 @@
   <meta charset="UTF-8">
   <title>Painel Admin | Maxy Tedesco</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #020617;
-      color: white;
-      padding: 40px;
-    }
-
-    h1 {
-      color: #22d3ee;
-      font-size: 42px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #0f172a;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-top: 20px;
-    }
-
-    th, td {
-      padding: 14px;
-      border-bottom: 1px solid #334155;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      background: #1e293b;
-      color: #22d3ee;
-    }
-
-    tr:hover {
-      background: #1e293b;
-    }
-
-    .denied {
-      color: #ff6b6b;
-      font-size: 32px;
-      margin-top: 80px;
-      text-align: center;
-    }
-
-    .logout {
-      background: #ef4444;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-bottom: 20px;
-    }
+    body { margin:0; font-family:Arial,sans-serif; background:#020617; color:white; padding:40px; }
+    h1 { color:#22d3ee; font-size:42px; }
+    input { width:100%; padding:14px; margin:10px 0; border-radius:8px; border:none; box-sizing:border-box; }
+    button { padding:12px 20px; border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
+    .login { max-width:420px; background:#0f172a; padding:30px; border-radius:16px; }
+    .btn { background:#22d3ee; color:#020617; }
+    .logout { background:#ef4444; color:white; margin-bottom:20px; }
+    table { width:100%; border-collapse:collapse; background:#0f172a; border-radius:12px; overflow:hidden; margin-top:20px; }
+    th, td { padding:14px; border-bottom:1px solid #334155; text-align:left; vertical-align:top; }
+    th { background:#1e293b; color:#22d3ee; }
+    tr:hover { background:#1e293b; }
+    #adminPanel { display:none; }
   </style>
 </head>
 
 <body>
 
-<script>
-  const ADMIN_USER = "maxytedesco";
-  const ADMIN_PASSWORD = "050118";
+<div id="loginBox" class="login">
+  <h1>Admin Login</h1>
+  <p>Entre com o e-mail e senha criados no Supabase.</p>
 
-  const user = prompt("Digite o usuário do administrador:");
-  const password = prompt("Digite a senha do administrador:");
+  <input id="email" type="email" placeholder="E-mail do administrador">
+  <input id="password" type="password" placeholder="Senha do administrador">
 
-  if (user !== ADMIN_USER || password !== ADMIN_PASSWORD) {
-    document.body.innerHTML = '<h1 class="denied">Acesso negado</h1>';
-    throw new Error("Acesso negado");
-  }
-</script>
+  <button class="btn" onclick="login()">Entrar</button>
 
-<h1>Painel Administrativo</h1>
-<p>Contatos recebidos pelo portfólio.</p>
+  <p id="loginError" style="color:#ef4444;"></p>
+</div>
 
-<button class="logout" onclick="window.location.href='index.html'">Sair</button>
+<div id="adminPanel">
+  <h1>Painel Administrativo</h1>
+  <p>Contatos recebidos pelo portfólio.</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Data/Hora</th>
-      <th>Nome</th>
-      <th>E-mail</th>
-      <th>Telefone</th>
-      <th>Tipo de vaga</th>
-      <th>Mensagem</th>
-    </tr>
-  </thead>
+  <button class="logout" onclick="logout()">Sair</button>
 
-  <tbody id="contactsTable">
-    <tr><td colspan="6">Carregando contatos...</td></tr>
-  </tbody>
-</table>
+  <table>
+    <thead>
+      <tr>
+        <th>Data/Hora</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Tipo de vaga</th>
+        <th>Mensagem</th>
+      </tr>
+    </thead>
+    <tbody id="contactsTable">
+      <tr><td colspan="6">Carregando contatos...</td></tr>
+    </tbody>
+  </table>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -107,7 +64,45 @@ const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
 const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 
 const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+const loginBox = document.getElementById("loginBox");
+const adminPanel = document.getElementById("adminPanel");
 const table = document.getElementById("contactsTable");
+const loginError = document.getElementById("loginError");
+
+async function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { error } = await client.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    loginError.innerText = "Login inválido. Verifique e-mail e senha.";
+    return;
+  }
+
+  loginBox.style.display = "none";
+  adminPanel.style.display = "block";
+  loadContacts();
+}
+
+async function logout() {
+  await client.auth.signOut();
+  window.location.reload();
+}
+
+async function checkSession() {
+  const { data } = await client.auth.getSession();
+
+  if (data.session) {
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
+    loadContacts();
+  }
+}
 
 async function loadContacts() {
   const { data, error } = await client
@@ -137,7 +132,7 @@ async function loadContacts() {
   `).join("");
 }
 
-loadContacts();
+checkSession();
 </script>
 
 </body>
