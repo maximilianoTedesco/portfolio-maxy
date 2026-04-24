@@ -82,18 +82,18 @@ nav a:hover {
 .hero {
   height: 100vh;
   background:
-    linear-gradient(rgba(2,6,23,0.62), rgba(2,6,23,0.92)),
+    linear-gradient(to right, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.75) 35%, rgba(2,6,23,0.4) 70%, rgba(2,6,23,0.2) 100%),
     url("hero.jpg");
   background-size: cover;
-  background-position: center right;
+  background-position: right center;
   display: flex;
   align-items: center;
-  padding: 0 90px;
+  justify-content: flex-start;
+  padding: 0 80px;
 }
 
 .hero-content {
-  max-width: 700px;
-  animation: fadeUp 1s ease;
+  max-width: 520px; /* diminui largura */
 }
 
 .hero h1 {
