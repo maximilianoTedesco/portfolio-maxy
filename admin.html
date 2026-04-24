@@ -19,16 +19,13 @@
       font-size: 42px;
     }
 
-    p {
-      margin-bottom: 30px;
-    }
-
     table {
       width: 100%;
       border-collapse: collapse;
       background: #0f172a;
       border-radius: 12px;
       overflow: hidden;
+      margin-top: 20px;
     }
 
     th, td {
@@ -64,60 +61,50 @@
       <th>Mensagem</th>
     </tr>
   </thead>
+
   <tbody id="contactsTable">
-    <tr>
-      <td colspan="6">Carregando contatos...</td>
-    </tr>
+    <tr><td colspan="6">Carregando contatos...</td></tr>
   </tbody>
 </table>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
-  const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
+const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 
-  const client = window.supabase.createClient(supabaseUrl, supabaseKey);
-  const table = document.getElementById("contactsTable");
+const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+const table = document.getElementById("contactsTable");
 
-  async function loadContacts() {
-    const { data, error } = await client
-      .from("contacts")
-      .select("*")
-      .order("created_at", { ascending: false });
+async function loadContacts() {
+  const { data, error } = await client
+    .from("contacts")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-    if (error) {
-      table.innerHTML = `
-        <tr>
-          <td colspan="6">Erro: ${error.message}</td>
-        </tr>
-      `;
-      console.log(error);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      table.innerHTML = `
-        <tr>
-          <td colspan="6">Nenhum contato encontrado.</td>
-        </tr>
-      `;
-      return;
-    }
-
-    table.innerHTML = data.map(c => `
-      <tr>
-        <td>${c.created_at ? new Date(c.created_at).toLocaleString("pt-BR") : ""}</td>
-        <td>${c.name || ""}</td>
-        <td>${c.email || ""}</td>
-        <td>${c.phone || ""}</td>
-        <td>${c.tipo_de_trabalho || ""}</td>
-        <td>${c.mensagem || ""}</td>
-      </tr>
-    `).join("");
+  if (error) {
+    table.innerHTML = `<tr><td colspan="6">Erro: ${error.message}</td></tr>`;
+    return;
   }
 
-  loadContacts();
+  if (!data || data.length === 0) {
+    table.innerHTML = `<tr><td colspan="6">Nenhum contato encontrado.</td></tr>`;
+    return;
+  }
+
+  table.innerHTML = data.map(c => `
+    <tr>
+      <td>${c.created_at ? new Date(c.created_at).toLocaleString("pt-BR") : ""}</td>
+      <td>${c.name || ""}</td>
+      <td>${c.email || ""}</td>
+      <td>${c.phone || ""}</td>
+      <td>${c.job_type || ""}</td>
+      <td>${c.message || ""}</td>
+    </tr>
+  `).join("");
+}
+
+loadContacts();
 </script>
 
 </body>
