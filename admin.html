@@ -2,229 +2,217 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Portfólio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
     body {
-      min-height: 100vh;
       background: #0f172a;
       color: #fff;
+      font-family: Arial;
       display: flex;
-      align-items: center;
       justify-content: center;
-      padding: 20px;
+      align-items: center;
+      min-height: 100vh;
     }
 
-    .container {
-      width: 100%;
+    .box {
+      width: 90%;
       max-width: 1000px;
-    }
-
-    .card {
       background: #111827;
-      border: 1px solid #334155;
-      border-radius: 16px;
       padding: 30px;
-      box-shadow: 0 20px 40px rgba(0,0,0,.3);
+      border-radius: 15px;
+      border: 1px solid #334155;
     }
 
-    h1, h2 {
-      margin-bottom: 20px;
+    h1 {
       color: #38bdf8;
+      margin-bottom: 20px;
     }
 
     input, button {
       width: 100%;
       padding: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       border-radius: 8px;
       border: none;
-      font-size: 15px;
     }
 
     input {
       background: #1e293b;
-      color: #fff;
-      border: 1px solid #334155;
+      color: white;
     }
 
     button {
       background: #38bdf8;
-      color: #020617;
       font-weight: bold;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #0ea5e9;
-    }
-
     .logout {
-      background: #ef4444;
-      color: #fff;
-      max-width: 150px;
+      background: red;
+      width: 150px;
+      float: right;
     }
 
     .hidden {
       display: none;
     }
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
     }
 
-    .message {
-      background: #1e293b;
+    th, td {
       border: 1px solid #334155;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 10px;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #1e293b;
     }
 
     .status {
       margin-top: 10px;
-      color: #facc15;
+      color: yellow;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
 
-    <!-- LOGIN -->
-    <div id="loginBox" class="card">
-      <h1>Login Admin</h1>
+<div class="box">
 
-      <input type="email" id="email" placeholder="E-mail" />
-      <input type="password" id="password" placeholder="Senha" />
+  <!-- LOGIN -->
+  <div id="loginBox">
+    <h1>Login Admin</h1>
 
-      <button id="loginBtn">Entrar</button>
-      <p id="loginStatus" class="status"></p>
-    </div>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Senha">
 
-    <!-- PAINEL -->
-    <div id="adminBox" class="card hidden">
-      <div class="topbar">
-        <h2>Mensagens</h2>
-        <button id="logoutBtn" class="logout">Sair</button>
-      </div>
-
-      <button id="refreshBtn">Atualizar</button>
-      <div id="messagesList"></div>
-    </div>
-
+    <button id="loginBtn">Entrar</button>
+    <p id="status" class="status"></p>
   </div>
 
-  <script>
-    // ✅ CONFIG CORRETA
-    const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
-    const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+  <!-- PAINEL -->
+  <div id="adminBox" class="hidden">
+    <button class="logout" id="logoutBtn">Sair</button>
+    <h1>Mensagens</h1>
 
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+    <button id="refreshBtn">Atualizar</button>
 
-    const TABLE_NAME = "message";
+    <div id="list"></div>
+  </div>
 
-    const loginBox = document.getElementById("loginBox");
-    const adminBox = document.getElementById("adminBox");
-    const loginBtn = document.getElementById("loginBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const refreshBtn = document.getElementById("refreshBtn");
-    const loginStatus = document.getElementById("loginStatus");
-    const messagesList = document.getElementById("messagesList");
+</div>
 
-    function showLogin() {
-      loginBox.classList.remove("hidden");
-      adminBox.classList.add("hidden");
-    }
+<script>
+const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
+const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 
-    function showAdmin() {
-      loginBox.classList.add("hidden");
-      adminBox.classList.remove("hidden");
-      loadMessages();
-    }
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+const TABLE_NAME = "message";
 
-    async function checkSession() {
-      const { data } = await supabaseClient.auth.getSession();
+const loginBox = document.getElementById("loginBox");
+const adminBox = document.getElementById("adminBox");
+const status = document.getElementById("status");
+const list = document.getElementById("list");
 
-      if (data.session) {
-        showAdmin();
-      } else {
-        showLogin();
-      }
-    }
+document.getElementById("loginBtn").onclick = async () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-    loginBtn.addEventListener("click", async () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+  status.innerText = "Entrando...";
 
-      loginStatus.textContent = "Entrando...";
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
 
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-      });
+  if (error) {
+    status.innerText = error.message;
+    return;
+  }
 
-      if (error) {
-        loginStatus.textContent = "Erro: " + error.message;
-        return;
-      }
+  showAdmin();
+};
 
-      showAdmin();
-    });
+document.getElementById("logoutBtn").onclick = async () => {
+  await supabaseClient.auth.signOut();
+  showLogin();
+};
 
-    logoutBtn.addEventListener("click", async () => {
-      await supabaseClient.auth.signOut();
-      showLogin();
-    });
+document.getElementById("refreshBtn").onclick = load;
 
-    refreshBtn.addEventListener("click", loadMessages);
+function showAdmin() {
+  loginBox.classList.add("hidden");
+  adminBox.classList.remove("hidden");
+  load();
+}
 
-    async function loadMessages() {
-      messagesList.innerHTML = "Carregando...";
+function showLogin() {
+  loginBox.classList.remove("hidden");
+  adminBox.classList.add("hidden");
+}
 
-      const { data, error } = await supabaseClient
-        .from(TABLE_NAME)
-        .select("*")
-        .order("created_at", { ascending: false });
+async function load() {
+  list.innerHTML = "Carregando...";
 
-      if (error) {
-        messagesList.innerHTML = "Erro ao carregar";
-        return;
-      }
+  const { data, error } = await supabaseClient
+    .from(TABLE_NAME)
+    .select("*");
 
-      messagesList.innerHTML = "";
+  if (error) {
+    console.error(error);
+    list.innerHTML = "Erro ao carregar: " + error.message;
+    return;
+  }
 
-      data.forEach(msg => {
-        const div = document.createElement("div");
-        div.className = "message";
-        div.innerHTML = `
-          <p><strong>Nome:</strong> ${msg.name}</p>
-          <p><strong>Email:</strong> ${msg.email}</p>
-          <p><strong>Mensagem:</strong> ${msg.message}</p>
-        `;
-        messagesList.appendChild(div);
-      });
-    }
+  if (!data || data.length === 0) {
+    list.innerHTML = "Nenhuma mensagem encontrada.";
+    return;
+  }
 
-    supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (session) showAdmin();
-      else showLogin();
-    });
+  let html = `
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Telefone</th>
+          <th>Serviço</th>
+          <th>Mensagem</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
 
-    checkSession();
-  </script>
+  data.forEach(msg => {
+    html += `
+      <tr>
+        <td>${msg.name || ""}</td>
+        <td>${msg.email || ""}</td>
+        <td>${msg.phone || ""}</td>
+        <td>${msg.job_type || ""}</td>
+        <td>${msg.message || ""}</td>
+      </tr>
+    `;
+  });
+
+  html += "</tbody></table>";
+
+  list.innerHTML = html;
+}
+
+supabaseClient.auth.getSession().then(({ data }) => {
+  if (data.session) showAdmin();
+});
+</script>
+
 </body>
 </html>
