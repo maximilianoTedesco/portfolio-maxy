@@ -153,31 +153,26 @@ form.addEventListener("submit", async (e) => {
     .insert([data]);
 
   if (error) {
-    alert("Error sending contact: " + error.message);
+    alert("Error saving contact: " + error.message);
     return;
   }
 
-  const text = `
-New contact from portfolio:
+  const emailResponse = await fetch("/api/send-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
 
-Name: ${data.name}
-Email: ${data.email}
-Phone: ${data.phone}
-Job Type: ${data.job_type}
-Message: ${data.message}
-`;
-
-  const encoded = encodeURIComponent(text);
-
-  // ALTERE AQUI COM SEU NÚMERO
-  // Exemplo: 5511999999999
-  const phoneNumber = "5551995527630";
-
-  window.open(`https://wa.me/${phoneNumber}?text=${encoded}`, "_blank");
+  if (!emailResponse.ok) {
+    alert("Contact saved, but email notification failed.");
+    form.reset();
+    return;
+  }
 
   form.reset();
-
-  alert("Contact sent! Redirecting to WhatsApp...");
+  alert("Contact sent successfully!");
 });
 </script>
 
