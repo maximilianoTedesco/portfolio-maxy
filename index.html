@@ -179,15 +179,26 @@ section {
 
 <!-- CONTATO -->
 <section id="contact">
-  <h2>Contato</h2>
-  <form id="contactForm">
-    <input name="name" placeholder="Nome" required>
-    <input name="email" type="email" placeholder="Email" required>
-    <input name="phone" placeholder="Telefone">
-    <input name="job_type" placeholder="Tipo de oportunidade" required>
-    <textarea name="message" placeholder="Mensagem"></textarea>
-    <button class="btn">Enviar</button>
-  </form>
+  <div class="contact-container">
+
+    <h2>Contato</h2>
+    <p>Envie sua proposta ou oportunidade.</p>
+
+    <form id="contactForm" class="contact-form">
+
+      <input name="name" placeholder="Nome" required />
+      <input name="email" type="email" placeholder="Email" required />
+      <input name="phone" placeholder="Telefone / WhatsApp" />
+      <input name="job_type" placeholder="Tipo de oportunidade" required />
+
+      <textarea name="message" placeholder="Mensagem"></textarea>
+
+      <button id="submitBtn" class="btn">Enviar mensagem</button>
+
+      <div id="formMessage" class="message-box"></div>
+
+    </form>
+  </div>
 </section>
 
 <!-- WHATSAPP -->
