@@ -1,217 +1,301 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8">
+  <title>Painel Admin | Maxy Tedesco</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
-      background: #0f172a;
-      color: #fff;
-      font-family: Arial;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .box {
-      width: 90%;
-      max-width: 1000px;
-      background: #111827;
-      padding: 30px;
-      border-radius: 15px;
-      border: 1px solid #334155;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #020617;
+      color: white;
+      padding: 40px;
     }
 
     h1 {
-      color: #38bdf8;
-      margin-bottom: 20px;
+      color: #22d3ee;
+      font-size: 42px;
     }
 
-    input, button {
-      width: 100%;
+    input, select {
       padding: 12px;
-      margin-bottom: 10px;
       border-radius: 8px;
       border: none;
-    }
-
-    input {
-      background: #1e293b;
-      color: white;
+      margin: 5px;
+      font-size: 16px;
     }
 
     button {
-      background: #38bdf8;
-      font-weight: bold;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
+      font-size: 16px;
+    }
+
+    .btn {
+      background: #22d3ee;
+      color: #020617;
     }
 
     .logout {
-      background: red;
-      width: 150px;
-      float: right;
+      background: #ef4444;
+      color: white;
     }
 
-    .hidden {
-      display: none;
+    .login {
+      max-width: 420px;
+      background: #0f172a;
+      padding: 30px;
+      border-radius: 16px;
+    }
+
+    .filters {
+      margin: 25px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
     }
 
     table {
       width: 100%;
-      margin-top: 20px;
       border-collapse: collapse;
+      background: #0f172a;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 20px;
     }
 
     th, td {
-      border: 1px solid #334155;
-      padding: 10px;
+      padding: 14px;
+      border-bottom: 1px solid #334155;
       text-align: left;
+      vertical-align: top;
     }
 
     th {
       background: #1e293b;
+      color: #22d3ee;
     }
 
-    .status {
-      margin-top: 10px;
-      color: yellow;
+    tr:hover {
+      background: #1e293b;
+    }
+
+    #adminPanel {
+      display: none;
+    }
+
+    #error {
+      color: #ef4444;
     }
   </style>
 </head>
 
 <body>
 
-<div class="box">
+<div id="loginBox" class="login">
+  <h1>Admin Login</h1>
+  <p>Entre com o e-mail e senha cadastrados no Supabase.</p>
 
-  <!-- LOGIN -->
-  <div id="loginBox">
-    <h1>Login Admin</h1>
+  <input id="email" type="email" placeholder="E-mail do administrador">
+  <input id="password" type="password" placeholder="Senha do administrador">
 
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Senha">
+  <br>
+  <button class="btn" onclick="login()">Entrar</button>
 
-    <button id="loginBtn">Entrar</button>
-    <p id="status" class="status"></p>
-  </div>
-
-  <!-- PAINEL -->
-  <div id="adminBox" class="hidden">
-    <button class="logout" id="logoutBtn">Sair</button>
-    <h1>Mensagens</h1>
-
-    <button id="refreshBtn">Atualizar</button>
-
-    <div id="list"></div>
-  </div>
-
+  <p id="error"></p>
 </div>
+
+<div id="adminPanel">
+  <h1>Painel Administrativo</h1>
+  <p>Contatos recebidos pelo portfólio.</p>
+
+  <div class="filters">
+    <input type="text" id="search" placeholder="Buscar nome ou e-mail">
+
+    <select id="filter">
+      <option value="">Todas as vagas</option>
+    </select>
+
+    <button class="btn" onclick="exportCSV()">Exportar CSV</button>
+    <button class="logout" onclick="logout()">Sair</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Data/Hora</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Tipo de vaga</th>
+        <th>Mensagem</th>
+      </tr>
+    </thead>
+    <tbody id="contactsTable">
+      <tr><td colspan="6">Carregando contatos...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
 const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 
-const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-const TABLE_NAME = "message";
+const client = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 const loginBox = document.getElementById("loginBox");
-const adminBox = document.getElementById("adminBox");
-const status = document.getElementById("status");
-const list = document.getElementById("list");
+const adminPanel = document.getElementById("adminPanel");
+const table = document.getElementById("contactsTable");
+const errorBox = document.getElementById("error");
 
-document.getElementById("loginBtn").onclick = async () => {
+let contacts = [];
+
+async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  status.innerText = "Entrando...";
-
-  const { error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
+  const { error } = await client.auth.signInWithPassword({
+    email: email,
+    password: password
   });
 
   if (error) {
-    status.innerText = error.message;
+    errorBox.innerText = "Login inválido. Verifique e-mail e senha.";
     return;
   }
 
-  showAdmin();
-};
-
-document.getElementById("logoutBtn").onclick = async () => {
-  await supabaseClient.auth.signOut();
-  showLogin();
-};
-
-document.getElementById("refreshBtn").onclick = load;
-
-function showAdmin() {
-  loginBox.classList.add("hidden");
-  adminBox.classList.remove("hidden");
-  load();
+  loginBox.style.display = "none";
+  adminPanel.style.display = "block";
+  await loadContacts();
 }
 
-function showLogin() {
-  loginBox.classList.remove("hidden");
-  adminBox.classList.add("hidden");
+async function logout() {
+  await client.auth.signOut();
+  window.location.reload();
 }
 
-async function load() {
-  list.innerHTML = "Carregando...";
+async function checkSession() {
+  const { data } = await client.auth.getSession();
 
-  const { data, error } = await supabaseClient
-    .from(TABLE_NAME)
-    .select("*");
+  if (data.session) {
+    loginBox.style.display = "none";
+    adminPanel.style.display = "block";
+    await loadContacts();
+  }
+}
+
+async function loadContacts() {
+  const { data, error } = await client
+    .from("contacts")
+    .select("*")
+    .order("created_at", { ascending: false });
 
   if (error) {
-    console.error(error);
-    list.innerHTML = "Erro ao carregar: " + error.message;
+    table.innerHTML = `<tr><td colspan="6">Erro: ${error.message}</td></tr>`;
     return;
   }
 
-  if (!data || data.length === 0) {
-    list.innerHTML = "Nenhuma mensagem encontrada.";
-    return;
-  }
+  contacts = data || [];
 
-  let html = `
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Telefone</th>
-          <th>Serviço</th>
-          <th>Mensagem</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-  data.forEach(msg => {
-    html += `
-      <tr>
-        <td>${msg.name || ""}</td>
-        <td>${msg.email || ""}</td>
-        <td>${msg.phone || ""}</td>
-        <td>${msg.job_type || ""}</td>
-        <td>${msg.message || ""}</td>
-      </tr>
-    `;
-  });
-
-  html += "</tbody></table>";
-
-  list.innerHTML = html;
+  populateFilter();
+  renderContacts();
 }
 
-supabaseClient.auth.getSession().then(({ data }) => {
-  if (data.session) showAdmin();
-});
+function populateFilter() {
+  const filter = document.getElementById("filter");
+  const currentValue = filter.value;
+
+  const jobTypes = [...new Set(
+    contacts
+      .map(c => c.job_type)
+      .filter(Boolean)
+  )];
+
+  filter.innerHTML = `<option value="">Todas as vagas</option>`;
+
+  jobTypes.forEach(type => {
+    const option = document.createElement("option");
+    option.value = type;
+    option.textContent = type;
+    filter.appendChild(option);
+  });
+
+  filter.value = currentValue;
+}
+
+function renderContacts() {
+  const search = document.getElementById("search").value.toLowerCase();
+  const selectedJob = document.getElementById("filter").value;
+
+  const filtered = contacts.filter(c => {
+    const name = (c.name || "").toLowerCase();
+    const email = (c.email || "").toLowerCase();
+    const job = c.job_type || "";
+
+    const matchesSearch =
+      name.includes(search) ||
+      email.includes(search);
+
+    const matchesJob =
+      selectedJob === "" ||
+      job === selectedJob;
+
+    return matchesSearch && matchesJob;
+  });
+
+  if (filtered.length === 0) {
+    table.innerHTML = `<tr><td colspan="6">Nenhum contato encontrado.</td></tr>`;
+    return;
+  }
+
+  table.innerHTML = filtered.map(c => `
+    <tr>
+      <td>${c.created_at ? new Date(c.created_at).toLocaleString("pt-BR") : ""}</td>
+      <td>${c.name || ""}</td>
+      <td>${c.email || ""}</td>
+      <td>${c.phone || ""}</td>
+      <td>${c.job_type || ""}</td>
+      <td>${c.message || ""}</td>
+    </tr>
+  `).join("");
+}
+
+function exportCSV() {
+  if (!contacts.length) {
+    alert("Não há contatos para exportar.");
+    return;
+  }
+
+  let csv = "Data,Nome,Email,Telefone,Tipo de vaga,Mensagem\n";
+
+  contacts.forEach(c => {
+    csv += `"${c.created_at ? new Date(c.created_at).toLocaleString("pt-BR") : ""}","${c.name || ""}","${c.email || ""}","${c.phone || ""}","${c.job_type || ""}","${c.message || ""}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "contatos_portfolio.csv";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById("search").addEventListener("input", renderContacts);
+document.getElementById("filter").addEventListener("change", renderContacts);
+
+checkSession();
 </script>
 
 </body>
