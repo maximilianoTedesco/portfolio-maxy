@@ -1,308 +1,228 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Maxy Tedesco | Portfolio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maxy Tedesco</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-    }
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #020617;
-      color: #ffffff;
-    }
-    .hero-content h1 {
-  text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+body {
+  background:#020617;
+  color:#fff;
+  scroll-behavior:smooth;
 }
 
-.hero-content h2 {
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+/* NAVBAR */
+nav {
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:20px 60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(2,6,23,0.6);
+  backdrop-filter:blur(10px);
+  z-index:999;
 }
 
-    .admin-btn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: rgba(15, 23, 42, 0.9);
-      color: #22d3ee;
-      padding: 10px 16px;
-      border-radius: 999px;
-      text-decoration: none;
-      font-weight: bold;
-      z-index: 999;
-      border: 1px solid rgba(34, 211, 238, 0.6);
-      backdrop-filter: blur(10px);
-      transition: 0.3s;
-    }
+nav a {
+  margin-left:20px;
+  text-decoration:none;
+  color:#cbd5e1;
+  font-weight:bold;
+}
 
-    .admin-btn:hover {
-      background: #22d3ee;
-      color: #020617;
-    }
+nav a:hover {
+  color:#22d3ee;
+}
 
-    section {
-      padding: 90px 20px;
-    }
+/* HERO */
+.hero {
+  height:100vh;
+  background:
+    linear-gradient(rgba(2,6,23,0.7), rgba(2,6,23,0.9)),
+    url("hero.jpg");
+  background-size:cover;
+  background-position:center right;
+  display:flex;
+  align-items:center;
+  padding:0 60px;
+}
 
-    /* HERO COM SUA IMAGEM */
-    .hero {
-      min-height: 100vh;
-      background:
-        linear-gradient(rgba(2, 6, 23, 0.65), rgba(2, 6, 23, 0.85)),
-        url("hero.jpg");
-      background-size: cover;
-      background-position: center right;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 40px;
-    }
+.hero-content {
+  max-width:600px;
+  animation:fadeUp 1s ease;
+}
 
-    .hero-content {
-      max-width: 600px;
-      margin-left: 80px;
-    }
+.hero h1 {
+  font-size:60px;
+  margin-bottom:20px;
+  text-shadow:0 5px 20px rgba(0,0,0,0.5);
+}
 
-    h1 {
-      font-size: 60px;
-      margin-bottom: 10px;
-    }
+.hero h2 {
+  color:#cbd5e1;
+  margin-bottom:30px;
+}
 
-    h2 {
-      font-size: 28px;
-      margin-bottom: 20px;
-      color: #cbd5e1;
-    }
+.btn {
+  padding:15px 30px;
+  background:#22d3ee;
+  color:#000;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:bold;
+}
 
-    .btn {
-      padding: 15px 30px;
-      background: #22d3ee;
-      color: black;
-      border-radius: 10px;
-      text-decoration: none;
-      margin-top: 20px;
-      display: inline-block;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
-    }
+/* SECTIONS */
+section {
+  padding:100px 60px;
+}
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
-    }
+.grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
+.card {
+  background:#0f172a;
+  padding:25px;
+  border-radius:12px;
+}
 
-    .card {
-      background: #0f172a;
-      padding: 25px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
+/* PORTFOLIO */
+.portfolio img {
+  width:100%;
+  border-radius:12px;
+}
 
-    .contact-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-    }
+/* WHATSAPP */
+.whatsapp {
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#25d366;
+  color:white;
+  padding:15px;
+  border-radius:50%;
+  font-size:20px;
+  text-decoration:none;
+}
 
-    form {
-      background: #0f172a;
-      padding: 25px;
-      border-radius: 16px;
-    }
+/* ANIMAÇÃO */
+@keyframes fadeUp {
+  from {opacity:0; transform:translateY(20px);}
+  to {opacity:1; transform:translateY(0);}
+}
 
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: none;
-    }
-
-    textarea {
-      min-height: 120px;
-    }
-
-    .message-box {
-      display: none;
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    .success {
-      display: block;
-      background: rgba(34, 197, 94, 0.15);
-      color: #22c55e;
-      border: 1px solid #22c55e;
-    }
-
-    .error {
-      display: block;
-      background: rgba(239, 68, 68, 0.15);
-      color: #ef4444;
-      border: 1px solid #ef4444;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #94a3b8;
-    }
-
-    /* RESPONSIVO */
-    @media (max-width: 850px) {
-      .grid,
-      .contact-wrapper {
-        grid-template-columns: 1fr;
-      }
-
-      .hero {
-        justify-content: center;
-        text-align: center;
-      }
-
-      .hero-content {
-        margin-left: 0;
-      }
-    }
-  </style>
+/* RESPONSIVO */
+@media(max-width:800px){
+  nav {padding:15px;}
+  .hero {padding:20px;}
+  .grid {grid-template-columns:1fr;}
+}
+</style>
 </head>
 
 <body>
 
-  <a href="admin.html" class="admin-btn">Admin</a>
+<!-- NAVBAR -->
+<nav>
+  <div><strong>Maxy</strong></div>
+  <div>
+    <a href="#about">Sobre</a>
+    <a href="#services">Serviços</a>
+    <a href="#portfolio">Portfólio</a>
+    <a href="#contact">Contato</a>
+    <a href="admin.html">Admin</a>
+  </div>
+</nav>
 
-  <section class="hero">
-    <div class="hero-content">
-      <h1>Soluções que geram resultados</h1>
-      <h2>Transformando tecnologia em resultados reais</h2>
-      <a href="#contact" class="btn">Entrar em contato</a>
-    </div>
-  </section>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Soluções que geram resultados</h1>
+    <h2>Transformando tecnologia em resultados reais</h2>
+    <a href="#contact" class="btn">Entrar em contato</a>
+  </div>
+</section>
 
-  <section>
-    <div class="container">
-      <h2>Sobre mim</h2>
-      <p>
-        Profissional de tecnologia com experiência em suporte, SQL Server,
-        análise de dados e soluções com inteligência artificial.
-      </p>
-    </div>
-  </section>
+<!-- SOBRE -->
+<section id="about">
+  <h2>Sobre mim</h2>
+  <p>Profissional de tecnologia com foco em suporte, SQL Server, dados e automação com IA.</p>
+</section>
 
-  <section>
-    <div class="container">
-      <h2>Habilidades</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>Suporte</h3>
-          <p>Atendimento, troubleshooting e análise de problemas.</p>
-        </div>
-        <div class="card">
-          <h3>SQL Server</h3>
-          <p>Consultas, ERP e banco de dados.</p>
-        </div>
-        <div class="card">
-          <h3>Inteligência Artificial</h3>
-          <p>Automação e soluções inteligentes.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+<!-- SERVIÇOS -->
+<section id="services">
+  <h2>Serviços</h2>
+  <div class="grid">
+    <div class="card"><h3>Suporte</h3><p>Resolução de problemas e atendimento técnico.</p></div>
+    <div class="card"><h3>SQL Server</h3><p>Consultas e banco de dados.</p></div>
+    <div class="card"><h3>IA</h3><p>Automação e soluções inteligentes.</p></div>
+  </div>
+</section>
 
-  <section id="contact">
-    <div class="container">
-      <h2>Contato</h2>
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <h2>Portfólio</h2>
+  <div class="grid portfolio">
+    <img src="https://picsum.photos/400">
+    <img src="https://picsum.photos/401">
+    <img src="https://picsum.photos/402">
+  </div>
+</section>
 
-      <div class="contact-wrapper">
-        <div>
-          <p>Envie sua proposta ou oportunidade.</p>
-        </div>
+<!-- CONTATO -->
+<section id="contact">
+  <h2>Contato</h2>
+  <form id="contactForm">
+    <input name="name" placeholder="Nome" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="phone" placeholder="Telefone">
+    <input name="job_type" placeholder="Tipo de oportunidade" required>
+    <textarea name="message" placeholder="Mensagem"></textarea>
+    <button class="btn">Enviar</button>
+  </form>
+</section>
 
-        <form id="contactForm">
-          <input name="name" placeholder="Nome" required />
-          <input name="email" type="email" placeholder="Email" required />
-          <input name="phone" placeholder="Telefone" />
-          <input name="job_type" placeholder="Tipo de oportunidade" required />
-          <textarea name="message" placeholder="Mensagem"></textarea>
+<!-- WHATSAPP -->
+<a class="whatsapp" href="https://wa.me/SEUNUMERO">💬</a>
 
-          <button id="submitBtn" class="btn" type="submit">Enviar</button>
-          <div id="formMessage" class="message-box"></div>
-        </form>
-      </div>
-    </div>
-  </section>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <footer>
-    © 2026 Maxy Tedesco
-  </footer>
+<script>
+const client = supabase.createClient(
+  "https://kdgjfzsimvtgckialfpe.supabase.co",
+  "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L"
+);
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+document.getElementById("contactForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
 
-  <script>
-    const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
-    const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+  const data = {
+    name:e.target.name.value,
+    email:e.target.email.value,
+    phone:e.target.phone.value,
+    job_type:e.target.job_type.value,
+    message:e.target.message.value
+  };
 
-    const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+  await client.from("contacts").insert([data]);
 
-    const form = document.getElementById("contactForm");
-    const submitBtn = document.getElementById("submitBtn");
-    const formMessage = document.getElementById("formMessage");
+  await fetch("/api/send-email", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json"},
+    body:JSON.stringify(data)
+  });
 
-    function showMessage(type, text) {
-      formMessage.className = "message-box " + type;
-      formMessage.innerText = text;
-    }
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Enviando...";
-
-      const data = {
-        name: form.name.value,
-        email: form.email.value,
-        phone: form.phone.value,
-        job_type: form.job_type.value,
-        message: form.message.value
-      };
-
-      const { error } = await client.from("contacts").insert([data]);
-
-      if (error) {
-        showMessage("error", "Erro ao salvar contato.");
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Enviar";
-        return;
-      }
-
-      await fetch("/api/send-email", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-      });
-
-      form.reset();
-      showMessage("success", "Mensagem enviada com sucesso!");
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Enviar";
-    });
-  </script>
+  alert("Mensagem enviada!");
+});
+</script>
 
 </body>
 </html>
