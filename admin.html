@@ -178,7 +178,7 @@ function render(lista){
         </td>
 
         <td>
-          <button onclick="abrir(\`${m.message}\`)">Ver</button>
+          <button onclick="abrir('${m.id}', \`${m.message}\`)">Ver</button>
         </td>
       </tr>
     `;
@@ -199,9 +199,24 @@ async function mudarStatus(id, status){
   carregar();
 }
 
-function abrir(msg){
+async function abrir(id, msg){
+
   document.getElementById("textoModal").innerText = msg;
   document.getElementById("modal").style.display="flex";
+
+  await supabaseClient
+    .from("contacts")
+    .update({ status: "lido" })
+    .eq("id", id);
+
+  dados = dados.map(item => {
+    if (String(item.id) === String(id)) {
+      return { ...item, status: "lido" };
+    }
+    return item;
+  });
+
+  filtrar();
 }
 
 function fecharModal(){
