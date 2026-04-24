@@ -9,29 +9,42 @@ export default async function handler(req, res) {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "onboarding@resend.dev",
-        to: "portifoliomaxytedesco@gmail.com",
-        subject: "Novo contato do site",
+        from: "Portfolio <onboarding@resend.dev>",
+        to: ["SEU_EMAIL_AQUI"],
+        subject: "Novo contato recebido pelo portfólio",
         html: `
           <h2>Novo contato recebido</h2>
-          <p><b>Nome:</b> ${name}</p>
-          <p><b>Email:</b> ${email}</p>
-          <p><b>Telefone:</b> ${phone}</p>
-          <p><b>Vaga:</b> ${job_type}</p>
-          <p><b>Mensagem:</b> ${message}</p>
-        `
-      })
+          <p><strong>Nome:</strong> ${name}</p>
+          <p><strong>E-mail:</strong> ${email}</p>
+          <p><strong>Telefone:</strong> ${phone}</p>
+          <p><strong>Tipo de vaga:</strong> ${job_type}</p>
+          <p><strong>Mensagem:</strong> ${message}</p>
+        `,
+      }),
     });
 
     const data = await response.json();
 
-    res.status(200).json({ success: true, data });
+    if (!response.ok) {
+      return res.status(500).json({
+        error: "Resend error",
+        details: data,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data,
+    });
 
   } catch (error) {
-    res.status(500).json({ error: "Erro ao enviar email" });
+    return res.status(500).json({
+      error: "Erro interno ao enviar email",
+      details: error.message,
+    });
   }
 }
