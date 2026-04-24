@@ -6,68 +6,22 @@
 <title>Maxy Tedesco</title>
 
 <style>
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial;
+}
 
-  html {
+html {
   scroll-behavior: smooth;
 }
-
-#contact {
-  scroll-margin-top: 100px;
-}
-* {margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
 body {
   background:#020617;
   color:#fff;
-  scroll-behavior:smooth;
-}
-.contact-container {
-  max-width: 600px;
-  margin: auto;
-  text-align: center;
 }
 
-.contact-form {
-  background: #0f172a;
-  padding: 30px;
-  border-radius: 20px;
-  margin-top: 20px;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-.contact-form input,
-.contact-form textarea {
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-}
-
-.contact-form textarea {
-  min-height: 120px;
-}
-
-.message-box {
-  display: none;
-  margin-top: 15px;
-  padding: 12px;
-  border-radius: 10px;
-  font-weight: bold;
-}
-
-.success {
-  display: block;
-  background: rgba(34,197,94,0.15);
-  color: #22c55e;
-}
-
-.error {
-  display: block;
-  background: rgba(239,68,68,0.15);
-  color: #ef4444;
-}
 /* NAVBAR */
 nav {
   position:fixed;
@@ -108,13 +62,11 @@ nav a:hover {
 
 .hero-content {
   max-width:600px;
-  animation:fadeUp 1s ease;
 }
 
 .hero h1 {
   font-size:60px;
   margin-bottom:20px;
-  text-shadow:0 5px 20px rgba(0,0,0,0.5);
 }
 
 .hero h2 {
@@ -122,6 +74,7 @@ nav a:hover {
   margin-bottom:30px;
 }
 
+/* BUTTON */
 .btn {
   padding:15px 30px;
   background:#22d3ee;
@@ -129,6 +82,8 @@ nav a:hover {
   border-radius:10px;
   text-decoration:none;
   font-weight:bold;
+  border:none;
+  cursor:pointer;
 }
 
 /* SECTIONS */
@@ -136,61 +91,92 @@ section {
   padding:100px 60px;
 }
 
-.grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
+/* CONTACT */
+#contact {
+  scroll-margin-top:100px;
 }
 
-.card {
+.contact-container {
+  max-width:700px;
+  margin:auto;
+  text-align:center;
+}
+
+.contact-form {
   background:#0f172a;
-  padding:25px;
-  border-radius:12px;
+  padding:30px;
+  border-radius:20px;
+  margin-top:20px;
+  border:1px solid rgba(255,255,255,0.05);
+
+  opacity:0;
+  transform:translateY(30px);
+  transition:0.6s;
 }
 
-/* PORTFOLIO */
-.portfolio img {
+.contact-form.show {
+  opacity:1;
+  transform:translateY(0);
+}
+
+.form-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.contact-form input,
+.contact-form textarea {
   width:100%;
-  border-radius:12px;
+  padding:14px;
+  margin:10px 0;
+  border-radius:10px;
+  border:none;
 }
 
-/* WHATSAPP */
-.whatsapp {
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#25d366;
-  color:white;
-  padding:15px;
-  border-radius:50%;
-  font-size:20px;
-  text-decoration:none;
+.contact-form textarea {
+  min-height:120px;
 }
 
-/* ANIMAÇÃO */
-@keyframes fadeUp {
-  from {opacity:0; transform:translateY(20px);}
-  to {opacity:1; transform:translateY(0);}
+.contact-form .btn {
+  width:100%;
+}
+
+/* MESSAGE */
+.message-box {
+  display:none;
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+}
+
+.success {
+  display:block;
+  background:rgba(34,197,94,0.2);
+  color:#22c55e;
+}
+
+.error {
+  display:block;
+  background:rgba(239,68,68,0.2);
+  color:#ef4444;
 }
 
 /* RESPONSIVO */
 @media(max-width:800px){
   nav {padding:15px;}
   .hero {padding:20px;}
-  .grid {grid-template-columns:1fr;}
+  .form-grid {grid-template-columns:1fr;}
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+<!-- NAV -->
 <nav>
   <div><strong>Maxy</strong></div>
   <div>
-    <a href="#about">Sobre</a>
-    <a href="#services">Serviços</a>
-    <a href="#portfolio">Portfólio</a>
     <a href="#contact">Contato</a>
     <a href="admin.html">Admin</a>
   </div>
@@ -205,59 +191,32 @@ section {
   </div>
 </section>
 
-<!-- SOBRE -->
-<section id="about">
-  <h2>Sobre mim</h2>
-  <p>Profissional de tecnologia com foco em suporte, SQL Server, dados e automação com IA.</p>
-</section>
-
-<!-- SERVIÇOS -->
-<section id="services">
-  <h2>Serviços</h2>
-  <div class="grid">
-    <div class="card"><h3>Suporte</h3><p>Resolução de problemas e atendimento técnico.</p></div>
-    <div class="card"><h3>SQL Server</h3><p>Consultas e banco de dados.</p></div>
-    <div class="card"><h3>IA</h3><p>Automação e soluções inteligentes.</p></div>
-  </div>
-</section>
-
-<!-- PORTFOLIO -->
-<section id="portfolio">
-  <h2>Portfólio</h2>
-  <div class="grid portfolio">
-    <img src="https://picsum.photos/400">
-    <img src="https://picsum.photos/401">
-    <img src="https://picsum.photos/402">
-  </div>
-</section>
-
-<!-- CONTATO -->
+<!-- CONTACT -->
 <section id="contact">
   <div class="contact-container">
-
     <h2>Contato</h2>
-    <p>Envie sua proposta ou oportunidade.</p>
 
     <form id="contactForm" class="contact-form">
+      <div class="form-grid">
+        <input name="name" placeholder="Nome" required>
+        <input name="email" type="email" placeholder="Email" required>
+      </div>
 
-      <input name="name" placeholder="Nome" required />
-      <input name="email" type="email" placeholder="Email" required />
-      <input name="phone" placeholder="Telefone / WhatsApp" />
-      <input name="job_type" placeholder="Tipo de oportunidade" required />
+      <div class="form-grid">
+        <input name="phone" placeholder="Telefone">
+        <input name="job_type" placeholder="Tipo de oportunidade" required>
+      </div>
 
       <textarea name="message" placeholder="Mensagem"></textarea>
 
       <button id="submitBtn" class="btn">Enviar mensagem</button>
 
       <div id="formMessage" class="message-box"></div>
-
     </form>
   </div>
 </section>
 
-<!-- WHATSAPP -->
-<a class="whatsapp" href="https://wa.me/SEUNUMERO">💬</a>
-
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -266,27 +225,60 @@ const client = supabase.createClient(
   "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L"
 );
 
-document.getElementById("contactForm").addEventListener("submit", async (e)=>{
+const form = document.getElementById("contactForm");
+const btn = document.getElementById("submitBtn");
+const msg = document.getElementById("formMessage");
+
+function showMessage(type,text){
+  msg.className="message-box "+type;
+  msg.innerText=text;
+}
+
+form.addEventListener("submit", async (e)=>{
   e.preventDefault();
 
-  const data = {
-    name:e.target.name.value,
-    email:e.target.email.value,
-    phone:e.target.phone.value,
-    job_type:e.target.job_type.value,
-    message:e.target.message.value
+  btn.innerText="Enviando...";
+  btn.disabled=true;
+
+  const data={
+    name:form.name.value,
+    email:form.email.value,
+    phone:form.phone.value,
+    job_type:form.job_type.value,
+    message:form.message.value
   };
 
-  await client.from("contacts").insert([data]);
+  const {error}=await client.from("contacts").insert([data]);
 
-  await fetch("/api/send-email", {
+  if(error){
+    showMessage("error","Erro ao enviar");
+    btn.disabled=false;
+    btn.innerText="Enviar mensagem";
+    return;
+  }
+
+  await fetch("/api/send-email",{
     method:"POST",
-    headers:{ "Content-Type":"application/json"},
+    headers:{"Content-Type":"application/json"},
     body:JSON.stringify(data)
   });
 
-  alert("Mensagem enviada!");
+  form.reset();
+  showMessage("success","Mensagem enviada com sucesso!");
+  btn.disabled=false;
+  btn.innerText="Enviar mensagem";
 });
+
+/* ANIMAÇÃO AO CHEGAR NO FORM */
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      document.querySelector(".contact-form").classList.add("show");
+    }
+  });
+},{threshold:0.3});
+
+observer.observe(document.querySelector(".contact-form"));
 </script>
 
 </body>
