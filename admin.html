@@ -1,302 +1,298 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Painel Admin | Maxy Tedesco</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Portfólio</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      background: #020617;
-      color: white;
-      padding: 40px;
     }
 
-    h1 {
-      color: #22d3ee;
-      font-size: 42px;
+    body {
+      min-height: 100vh;
+      background: #0f172a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
 
-    input, select {
+    .container {
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.3);
+    }
+
+    h1, h2 {
+      margin-bottom: 20px;
+      color: #38bdf8;
+    }
+
+    input, textarea, button {
+      width: 100%;
       padding: 12px;
+      margin-bottom: 12px;
       border-radius: 8px;
       border: none;
-      margin: 5px;
-      font-size: 16px;
+      font-size: 15px;
+    }
+
+    input, textarea {
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #334155;
     }
 
     button {
-      padding: 12px 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+      background: #38bdf8;
+      color: #020617;
       font-weight: bold;
-      margin: 5px;
-      font-size: 16px;
+      cursor: pointer;
     }
 
-    .btn {
-      background: #22d3ee;
-      color: #020617;
+    button:hover {
+      background: #0ea5e9;
     }
 
     .logout {
       background: #ef4444;
-      color: white;
+      color: #fff;
+      max-width: 150px;
     }
 
-    .login {
-      max-width: 420px;
-      background: #0f172a;
-      padding: 30px;
-      border-radius: 16px;
+    .logout:hover {
+      background: #dc2626;
     }
 
-    .filters {
-      margin: 25px 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #0f172a;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-top: 20px;
-    }
-
-    th, td {
-      padding: 14px;
-      border-bottom: 1px solid #334155;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      background: #1e293b;
-      color: #22d3ee;
-    }
-
-    tr:hover {
-      background: #1e293b;
-    }
-
-    #adminPanel {
+    .hidden {
       display: none;
     }
 
-    #error {
-      color: #ef4444;
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      gap: 15px;
+    }
+
+    .message {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .message p {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .message strong {
+      color: #38bdf8;
+    }
+
+    .status {
+      margin-top: 10px;
+      color: #facc15;
+      font-size: 14px;
+    }
+
+    .empty {
+      color: #94a3b8;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .logout {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 
 <body>
+  <div class="container">
 
-<div id="loginBox" class="login">
-  <h1>Admin Login</h1>
-  <p>Entre com o e-mail e senha cadastrados no Supabase.</p>
+    <!-- LOGIN -->
+    <div id="loginBox" class="card">
+      <h1>Login Admin</h1>
 
-  <input id="email" type="email" placeholder="E-mail do administrador">
-  <input id="password" type="password" placeholder="Senha do administrador">
+      <input type="email" id="email" placeholder="E-mail" autocomplete="email" />
+      <input type="password" id="password" placeholder="Senha" autocomplete="current-password" />
 
-  <br>
-  <button class="btn" onclick="login()">Entrar</button>
+      <button id="loginBtn">Entrar</button>
 
-  <p id="error"></p>
-</div>
+      <p id="loginStatus" class="status"></p>
+    </div>
 
-<div id="adminPanel">
-  <h1>Painel Administrativo</h1>
-  <p>Contatos recebidos pelo portfólio.</p>
+    <!-- PAINEL -->
+    <div id="adminBox" class="card hidden">
+      <div class="topbar">
+        <h2>Mensagens recebidas</h2>
+        <button id="logoutBtn" class="logout">Sair</button>
+      </div>
 
-  <div class="filters">
-    <input type="text" id="search" placeholder="Buscar nome ou e-mail">
+      <button id="refreshBtn">Atualizar mensagens</button>
 
-    <select id="filter">
-      <option value="">Todas as vagas</option>
-    </select>
+      <div id="messagesList"></div>
+    </div>
 
-    <button class="btn" onclick="exportCSV()">Exportar CSV</button>
-    <button class="logout" onclick="logout()">Sair</button>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Data/Hora</th>
-        <th>Nome</th>
-        <th>E-mail</th>
-        <th>Telefone</th>
-        <th>Tipo de vaga</th>
-        <th>Mensagem</th>
-      </tr>
-    </thead>
-    <tbody id="contactsTable">
-      <tr><td colspan="6">Carregando contatos...</td></tr>
-    </tbody>
-  </table>
-</div>
+  <script>
+    const SUPABASE_URL = "COLE_AQUI_SUA_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_SUPABASE_ANON_KEY";
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    const TABLE_NAME = "message";
 
-<script>
-const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
-const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const loginBox = document.getElementById("loginBox");
+    const adminBox = document.getElementById("adminBox");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const loginStatus = document.getElementById("loginStatus");
+    const messagesList = document.getElementById("messagesList");
 
-const loginBox = document.getElementById("loginBox");
-const adminPanel = document.getElementById("adminPanel");
-const table = document.getElementById("contactsTable");
-const errorBox = document.getElementById("error");
+    function showLogin() {
+      loginBox.classList.remove("hidden");
+      adminBox.classList.add("hidden");
+    }
 
-let contacts = [];
+    function showAdmin() {
+      loginBox.classList.add("hidden");
+      adminBox.classList.remove("hidden");
+      loadMessages();
+    }
 
-async function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+    async function checkSession() {
+      const { data, error } = await supabaseClient.auth.getSession();
 
-  const { error } = await client.auth.signInWithPassword({
-    email: email,
-    password: password
-  });
+      if (error) {
+        console.error(error);
+        showLogin();
+        return;
+      }
 
-  if (error) {
-    errorBox.innerText = "Login inválido. Verifique e-mail e senha.";
-    return;
-  }
+      if (data.session) {
+        showAdmin();
+      } else {
+        showLogin();
+      }
+    }
 
-  loginBox.style.display = "none";
-  adminPanel.style.display = "block";
-  await loadContacts();
-}
+    loginBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-async function logout() {
-  await client.auth.signOut();
-  window.location.reload();
-}
+      loginStatus.textContent = "";
 
-async function checkSession() {
-  const { data } = await client.auth.getSession();
+      if (!email || !password) {
+        loginStatus.textContent = "Informe o e-mail e a senha.";
+        return;
+      }
 
-  if (data.session) {
-    loginBox.style.display = "none";
-    adminPanel.style.display = "block";
-    await loadContacts();
-  }
-}
+      loginBtn.textContent = "Entrando...";
+      loginBtn.disabled = true;
 
-async function loadContacts() {
-  const { data, error } = await client
-    .from("contacts")
-    .select("*")
-    .order("created_at", { ascending: false });
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
 
-  if (error) {
-    table.innerHTML = `<tr><td colspan="6">Erro: ${error.message}</td></tr>`;
-    return;
-  }
+      loginBtn.textContent = "Entrar";
+      loginBtn.disabled = false;
 
-  contacts = data || [];
+      if (error) {
+        console.error(error);
+        loginStatus.textContent = "Erro no login: " + error.message;
+        return;
+      }
 
-  populateFilter();
-  renderContacts();
-}
+      if (data.session) {
+        showAdmin();
+      }
+    });
 
-function populateFilter() {
-  const filter = document.getElementById("filter");
-  const currentValue = filter.value;
+    logoutBtn.addEventListener("click", async () => {
+      await supabaseClient.auth.signOut();
+      showLogin();
+    });
 
-  const jobTypes = [...new Set(
-    contacts
-      .map(c => c.job_type)
-      .filter(Boolean)
-  )];
+    refreshBtn.addEventListener("click", () => {
+      loadMessages();
+    });
 
-  filter.innerHTML = `<option value="">Todas as vagas</option>`;
+    async function loadMessages() {
+      messagesList.innerHTML = "<p class='empty'>Carregando mensagens...</p>";
 
-  jobTypes.forEach(type => {
-    const option = document.createElement("option");
-    option.value = type;
-    option.textContent = type;
-    filter.appendChild(option);
-  });
+      const { data, error } = await supabaseClient
+        .from(TABLE_NAME)
+        .select("*")
+        .order("created_at", { ascending: false });
 
-  filter.value = currentValue;
-}
+      if (error) {
+        console.error(error);
+        messagesList.innerHTML = "<p class='empty'>Erro ao carregar mensagens: " + error.message + "</p>";
+        return;
+      }
 
-function renderContacts() {
-  const search = document.getElementById("search").value.toLowerCase();
-  const selectedJob = document.getElementById("filter").value;
+      if (!data || data.length === 0) {
+        messagesList.innerHTML = "<p class='empty'>Nenhuma mensagem encontrada.</p>";
+        return;
+      }
 
-  const filtered = contacts.filter(c => {
-    const name = (c.name || "").toLowerCase();
-    const email = (c.email || "").toLowerCase();
-    const job = c.job_type || "";
+      messagesList.innerHTML = "";
 
-    const matchesSearch =
-      name.includes(search) ||
-      email.includes(search);
+      data.forEach((msg) => {
+        const div = document.createElement("div");
+        div.className = "message";
 
-    const matchesJob =
-      selectedJob === "" ||
-      job === selectedJob;
+        div.innerHTML = `
+          <p><strong>Nome:</strong> ${msg.name || "Não informado"}</p>
+          <p><strong>E-mail:</strong> ${msg.email || "Não informado"}</p>
+          <p><strong>Telefone:</strong> ${msg.phone || "Não informado"}</p>
+          <p><strong>Serviço:</strong> ${msg.job_type || "Não informado"}</p>
+          <p><strong>Mensagem:</strong> ${msg.message || "Sem mensagem"}</p>
+          <p><strong>Data:</strong> ${msg.created_at ? new Date(msg.created_at).toLocaleString("pt-BR") : "Sem data"}</p>
+        `;
 
-    return matchesSearch && matchesJob;
-  });
+        messagesList.appendChild(div);
+      });
+    }
 
-  if (filtered.length === 0) {
-    table.innerHTML = `<tr><td colspan="6">Nenhum contato encontrado.</td></tr>`;
-    return;
-  }
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        showAdmin();
+      } else {
+        showLogin();
+      }
+    });
 
-  table.innerHTML = filtered.map(c => `
-    <tr>
-      <td>${c.created_at ? new Date(c.created_at).toLocaleString("pt-BR") : ""}</td>
-      <td>${c.name || ""}</td>
-      <td>${c.email || ""}</td>
-      <td>${c.phone || ""}</td>
-      <td>${c.job_type || ""}</td>
-      <td>${c.message || ""}</td>
-    </tr>
-  `).join("");
-}
-
-function exportCSV() {
-  if (!contacts.length) {
-    alert("Não há contatos para exportar.");
-    return;
-  }
-
-  let csv = "Data,Nome,Email,Telefone,Tipo de vaga,Mensagem\n";
-
-  contacts.forEach(c => {
-    csv += `"${c.created_at ? new Date(c.created_at).toLocaleString("pt-BR") : ""}","${c.name || ""}","${c.email || ""}","${c.phone || ""}","${c.job_type || ""}","${c.message || ""}"\n`;
-  });
-
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "contatos_portfolio.csv";
-  a.click();
-
-  URL.revokeObjectURL(url);
-}
-
-document.getElementById("search").addEventListener("input", renderContacts);
-document.getElementById("filter").addEventListener("change", renderContacts);
-
-checkSession();
-</script>
-
+    checkSession();
+  </script>
 </body>
 </html>
