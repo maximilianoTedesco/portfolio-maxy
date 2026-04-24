@@ -97,7 +97,7 @@ const SUPABASE_URL = "https://kdgjfzsimvtgckialfpe.supabase.co";
 const SUPABASE_KEY = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 const ADMIN_PASSWORD = "LiSa-2011";
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let dados = [];
 
@@ -117,8 +117,8 @@ function logout(){
 
 async function carregar(){
 
-  const { data, error } = await supabase
-    .from("contacts") // ✅ TABELA CORRETA
+  const { data, error } = await supabaseClient
+    .from("contacts")
     .select("*")
     .order("created_at", { ascending:false });
 
@@ -178,7 +178,7 @@ function render(lista){
         </td>
 
         <td>
-          <button onclick="abrir('${m.message}')">Ver</button>
+          <button onclick="abrir(\`${m.message}\`)">Ver</button>
         </td>
       </tr>
     `;
@@ -191,8 +191,8 @@ function render(lista){
 
 async function mudarStatus(id, status){
 
-  await supabase
-    .from("contacts") // ✅ CORRETO
+  await supabaseClient
+    .from("contacts")
     .update({ status })
     .eq("id", id);
 
