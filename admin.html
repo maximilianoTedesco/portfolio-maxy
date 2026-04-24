@@ -1,289 +1,221 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Painel Admin | Maxy Tedesco</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * {
       box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #020617;
-      color: white;
-      padding: 40px;
+      background: #f4f6f8;
+      color: #222;
     }
 
-    h1 {
-      color: #22d3ee;
-      font-size: 36px;
-      margin-bottom: 20px;
+    .login-container,
+    .admin-container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 20px;
     }
 
-    input, select {
-      padding: 10px;
-      border-radius: 6px;
-      border: none;
-      margin: 5px;
+    .login-box {
+      max-width: 400px;
+      margin: 100px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    h1, h2 {
+      margin-top: 0;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
       font-size: 14px;
-      outline: none;
     }
 
     button {
-      padding: 10px 14px;
-      border: none;
-      border-radius: 6px;
       cursor: pointer;
-      font-weight: bold;
-      margin: 5px;
-      transition: 0.2s ease;
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .btn {
-      background: #22d3ee;
-      color: #020617;
-    }
-
-    .btn:hover:not(:disabled) {
-      background: #67e8f9;
-    }
-
-    .logout {
-      background: #ef4444;
+      border: none;
+      background: #111827;
       color: white;
+      font-weight: bold;
+      transition: 0.2s;
     }
 
-    .logout:hover:not(:disabled) {
-      background: #f87171;
+    button:hover {
+      opacity: 0.9;
     }
 
-    .login {
-      max-width: 400px;
-      background: #0f172a;
-      padding: 25px;
-      border-radius: 12px;
-      margin: 80px auto;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
-    .login input {
-      width: 100%;
-      margin: 8px 0;
+    .top-bar button {
+      width: auto;
+      padding: 10px 18px;
+      background: #dc2626;
     }
 
     .filters {
-      margin: 20px 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .table-container {
-      width: 100%;
-      overflow-x: auto;
-      background: #0f172a;
-      border-radius: 10px;
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 15px;
+      margin-bottom: 20px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
     }
 
     th, td {
-      padding: 12px 10px;
-      border-bottom: 1px solid #334155;
+      padding: 14px;
+      border-bottom: 1px solid #eee;
       text-align: left;
-      vertical-align: top;
       font-size: 14px;
     }
 
     th {
-      background: #1e293b;
-      color: #22d3ee;
-      position: sticky;
-      top: 0;
-      z-index: 1;
+      background: #111827;
+      color: white;
     }
 
     tr:hover {
-      background: #1e293b;
+      background: #f9fafb;
     }
 
-    tbody tr {
-      cursor: pointer;
+    .status {
+      padding: 6px 10px;
+      border-radius: 20px;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      display: inline-block;
+      text-transform: uppercase;
     }
 
-    #adminPanel {
-      display: none;
+    .status-novo {
+      background: #dc2626;
     }
 
-    #error {
-      color: #ef4444;
-      margin-top: 10px;
+    .status-lido {
+      background: #f59e0b;
     }
 
-    #status {
-      color: #94a3b8;
-      margin: 10px 0;
-      font-size: 15px;
+    .status-respondido {
+      background: #16a34a;
     }
 
-    .message-cell {
-      max-width: 350px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .action-btn {
+      width: auto;
+      padding: 8px 12px;
+      font-size: 13px;
+      margin-right: 5px;
+      background: #2563eb;
     }
 
-    .loader {
-      width: 42px;
-      height: 42px;
-      border: 4px solid #334155;
-      border-top: 4px solid #22d3ee;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 20px auto;
+    .select-status {
+      min-width: 120px;
+      padding: 8px;
+      margin: 0;
     }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    .empty-state {
+    .empty {
+      background: white;
+      padding: 30px;
       text-align: center;
-      padding: 35px;
-      color: #cbd5e1;
-      font-size: 16px;
+      border-radius: 12px;
+      color: #666;
     }
 
-    mark {
-      background: #22d3ee;
-      color: #020617;
-      padding: 1px 3px;
-      border-radius: 3px;
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 999;
     }
 
     .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.78);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 20px;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
+      background: white;
       width: 100%;
-      max-width: 760px;
-      background: #0f172a;
-      border: 1px solid #334155;
+      max-width: 600px;
       border-radius: 14px;
-      padding: 24px;
-      box-shadow: 0 25px 70px rgba(0,0,0,0.55);
+      padding: 25px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
       position: relative;
     }
 
-    .modal-close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      background: #ef4444;
-      color: #fff;
-      border-radius: 6px;
-      padding: 7px 11px;
-    }
-
-    .modal-close:hover {
-      background: #f87171;
-    }
-
     .modal h2 {
-      color: #22d3ee;
-      margin-top: 0;
-      margin-bottom: 18px;
-      padding-right: 80px;
+      margin-bottom: 10px;
     }
 
-    .modal-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 18px;
-      margin-bottom: 18px;
-    }
-
-    .modal-info {
-      background: #020617;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #1e293b;
-    }
-
-    .modal-info strong {
-      color: #22d3ee;
-      display: block;
-      margin-bottom: 4px;
-      font-size: 13px;
-    }
-
-    .modal-message-title {
-      color: #22d3ee;
-      margin: 12px 0 8px;
-      font-weight: bold;
-    }
-
-    .modal-message {
-      background: #020617;
-      border: 1px solid #1e293b;
-      padding: 14px;
-      border-radius: 8px;
-      max-height: 320px;
-      overflow-y: auto;
+    .modal p {
+      line-height: 1.6;
       white-space: pre-wrap;
-      word-break: break-word;
-      line-height: 1.5;
+    }
+
+    .close-modal {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: #dc2626;
+      width: auto;
+      padding: 6px 10px;
+      border-radius: 6px;
+    }
+
+    .error {
+      color: #dc2626;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 25px;
+      color: #666;
     }
 
     @media (max-width: 768px) {
-      body {
-        padding: 20px;
-      }
-
-      h1 {
-        font-size: 28px;
-      }
-
-      .filters input,
-      .filters select,
-      .filters button {
-        width: 100%;
-      }
-
-      .modal-grid {
+      .filters {
         grid-template-columns: 1fr;
       }
 
-      .modal-content {
-        padding: 20px;
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+
+      .top-bar {
+        align-items: flex-start;
       }
     }
   </style>
@@ -291,140 +223,244 @@
 
 <body>
 
-  <div id="loginBox" class="login">
-    <h1>Admin Login</h1>
+  <div id="loginScreen" class="login-container">
+    <div class="login-box">
+      <h1>Admin</h1>
+      <p>Acesse o painel administrativo.</p>
 
-    <input id="email" type="email" placeholder="E-mail" autocomplete="email" />
-    <input id="password" type="password" placeholder="Senha" autocomplete="current-password" />
+      <input type="password" id="passwordInput" placeholder="Digite a senha" />
+      <button onclick="login()">Entrar</button>
 
-    <button id="loginBtn" class="btn" onclick="login()">Entrar</button>
-
-    <p id="error"></p>
+      <div id="loginError" class="error"></div>
+    </div>
   </div>
 
-  <div id="adminPanel">
-    <h1>Painel Administrativo</h1>
+  <div id="adminScreen" class="admin-container" style="display:none;">
+    <div class="top-bar">
+      <div>
+        <h1>Painel de Mensagens</h1>
+        <p>Gerencie as mensagens recebidas pelo site.</p>
+      </div>
+      <button onclick="logout()">Sair</button>
+    </div>
 
     <div class="filters">
-      <input type="text" id="search" placeholder="Buscar por nome, email, telefone ou mensagem" />
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Buscar por nome, e-mail, telefone ou mensagem..." 
+        oninput="applyFilters()" 
+      />
 
-      <select id="filter">
-        <option value="">Todas as vagas</option>
+      <select id="statusFilter" onchange="applyFilters()">
+        <option value="todos">Todos os status</option>
+        <option value="novo">Novo</option>
+        <option value="lido">Lido</option>
+        <option value="respondido">Respondido</option>
       </select>
-
-      <button class="btn action-btn" onclick="loadMessages()">Atualizar</button>
-      <button class="btn action-btn" onclick="exportCSV()">Exportar CSV</button>
-      <button class="logout action-btn" onclick="logout()">Sair</button>
     </div>
 
-    <p id="status"></p>
-
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Telefone</th>
-            <th>Vaga</th>
-            <th>Mensagem</th>
-          </tr>
-        </thead>
-
-        <tbody id="messagesTable">
-          <tr>
-            <td colspan="6">
-              <div class="loader"></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <div id="messagesArea" class="loading">Carregando mensagens...</div>
   </div>
 
-  <div id="messageModal" class="modal">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeModal()">Fechar</button>
-
-      <h2>Detalhes da Mensagem</h2>
-
-      <div class="modal-grid">
-        <div class="modal-info">
-          <strong>Data</strong>
-          <span id="modalDate">-</span>
-        </div>
-
-        <div class="modal-info">
-          <strong>Nome</strong>
-          <span id="modalName">-</span>
-        </div>
-
-        <div class="modal-info">
-          <strong>Email</strong>
-          <span id="modalEmail">-</span>
-        </div>
-
-        <div class="modal-info">
-          <strong>Telefone</strong>
-          <span id="modalPhone">-</span>
-        </div>
-
-        <div class="modal-info">
-          <strong>Vaga</strong>
-          <span id="modalJob">-</span>
-        </div>
-      </div>
-
-      <div class="modal-message-title">Mensagem completa</div>
-      <div id="modalMessage" class="modal-message">-</div>
+  <div id="messageModal" class="modal-overlay">
+    <div class="modal">
+      <button class="close-modal" onclick="closeModal()">X</button>
+      <h2 id="modalTitle">Mensagem</h2>
+      <p><strong>Nome:</strong> <span id="modalName"></span></p>
+      <p><strong>E-mail:</strong> <span id="modalEmail"></span></p>
+      <p><strong>Telefone:</strong> <span id="modalPhone"></span></p>
+      <hr>
+      <p id="modalMessage"></p>
     </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
     const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
-    const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+    const SUPABASE_ANON_KEY = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+    const ADMIN_PASSWORD = "LiSa-2011";
 
-    const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const loginBox = document.getElementById("loginBox");
-    const adminPanel = document.getElementById("adminPanel");
-    const table = document.getElementById("messagesTable");
-    const errorBox = document.getElementById("error");
-    const statusBox = document.getElementById("status");
-    const searchInput = document.getElementById("search");
-    const filterSelect = document.getElementById("filter");
-    const loginBtn = document.getElementById("loginBtn");
-    const modal = document.getElementById("messageModal");
+    let allMessages = [];
 
-    let messages = [];
-    let filteredMessages = [];
-    let debounceTimer;
+    document.addEventListener("DOMContentLoaded", () => {
+      const logged = localStorage.getItem("admin_logged");
 
-    function safe(value) {
-      if (value === null || value === undefined || value === "") return "-";
+      if (logged === "true") {
+        showAdmin();
+      }
+    });
 
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    function login() {
+      const password = document.getElementById("passwordInput").value;
+      const error = document.getElementById("loginError");
+
+      if (password === ADMIN_PASSWORD) {
+        localStorage.setItem("admin_logged", "true");
+        error.textContent = "";
+        showAdmin();
+      } else {
+        error.textContent = "Senha incorreta.";
+      }
     }
 
-    function plain(value) {
-      if (value === null || value === undefined || value === "") return "-";
-      return String(value);
+    function logout() {
+      localStorage.removeItem("admin_logged");
+      document.getElementById("adminScreen").style.display = "none";
+      document.getElementById("loginScreen").style.display = "block";
     }
 
-    function formatDate(value) {
-      if (!value) return "-";
+    function showAdmin() {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("adminScreen").style.display = "block";
+      loadMessages();
+    }
 
-      const date = new Date(value);
+    async function loadMessages() {
+      const area = document.getElementById("messagesArea");
+      area.innerHTML = "Carregando mensagens...";
 
-      if (isNaN(date.getTime())) return "-";
+      const { data, error } = await supabaseClient
+        .from("message")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+        area.innerHTML = "<div class='empty'>Erro ao carregar mensagens.</div>";
+        return;
+      }
+
+      allMessages = data || [];
+      renderMessages(allMessages);
+    }
+
+    function applyFilters() {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const status = document.getElementById("statusFilter").value;
+
+      let filtered = allMessages.filter(msg => {
+        const name = (msg.name || "").toLowerCase();
+        const email = (msg.email || "").toLowerCase();
+        const phone = (msg.phone || "").toLowerCase();
+        const message = (msg.message || "").toLowerCase();
+        const msgStatus = msg.status || "novo";
+
+        const matchesSearch =
+          name.includes(search) ||
+          email.includes(search) ||
+          phone.includes(search) ||
+          message.includes(search);
+
+        const matchesStatus =
+          status === "todos" || msgStatus === status;
+
+        return matchesSearch && matchesStatus;
+      });
+
+      renderMessages(filtered);
+    }
+
+    function renderMessages(messages) {
+      const area = document.getElementById("messagesArea");
+
+      if (!messages.length) {
+        area.innerHTML = "<div class='empty'>Nenhuma mensagem encontrada.</div>";
+        return;
+      }
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>Telefone</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      messages.forEach(msg => {
+        const status = msg.status || "novo";
+
+        html += `
+          <tr>
+            <td>${formatDate(msg.created_at)}</td>
+            <td>${escapeHtml(msg.name || "-")}</td>
+            <td>${escapeHtml(msg.email || "-")}</td>
+            <td>${escapeHtml(msg.phone || "-")}</td>
+            <td>
+              <span class="status status-${status}">
+                ${status}
+              </span>
+              <select class="select-status" onchange="updateStatus('${msg.id}', this.value)">
+                <option value="novo" ${status === "novo" ? "selected" : ""}>Novo</option>
+                <option value="lido" ${status === "lido" ? "selected" : ""}>Lido</option>
+                <option value="respondido" ${status === "respondido" ? "selected" : ""}>Respondido</option>
+              </select>
+            </td>
+            <td>
+              <button class="action-btn" onclick='openModal(${JSON.stringify(msg)})'>
+                Ver mensagem
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `
+          </tbody>
+        </table>
+      `;
+
+      area.innerHTML = html;
+    }
+
+    async function updateStatus(id, status) {
+      const { error } = await supabaseClient
+        .from("message")
+        .update({ status: status })
+        .eq("id", id);
+
+      if (error) {
+        console.error(error);
+        alert("Erro ao atualizar status. Verifique se a coluna status existe no Supabase.");
+        return;
+      }
+
+      allMessages = allMessages.map(msg => {
+        if (String(msg.id) === String(id)) {
+          return { ...msg, status: status };
+        }
+        return msg;
+      });
+
+      applyFilters();
+    }
+
+    function openModal(msg) {
+      document.getElementById("modalTitle").textContent = "Detalhes da Mensagem";
+      document.getElementById("modalName").textContent = msg.name || "-";
+      document.getElementById("modalEmail").textContent = msg.email || "-";
+      document.getElementById("modalPhone").textContent = msg.phone || "-";
+      document.getElementById("modalMessage").textContent = msg.message || "-";
+
+      document.getElementById("messageModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("messageModal").style.display = "none";
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return "-";
+
+      const date = new Date(dateString);
 
       return date.toLocaleString("pt-BR", {
         day: "2-digit",
@@ -435,266 +471,14 @@
       });
     }
 
-    function setButtonsLoading(isLoading) {
-      const buttons = document.querySelectorAll(".action-btn");
-
-      buttons.forEach(button => {
-        button.disabled = isLoading;
-      });
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
-
-    function showLoader() {
-      table.innerHTML = `
-        <tr>
-          <td colspan="6">
-            <div class="loader"></div>
-          </td>
-        </tr>
-      `;
-    }
-
-    function highlight(text, search) {
-      const cleanText = safe(text);
-
-      if (!search) return cleanText;
-
-      const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      const regex = new RegExp(`(${escapedSearch})`, "gi");
-
-      return cleanText.replace(regex, "<mark>$1</mark>");
-    }
-
-    async function login() {
-      errorBox.innerText = "";
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (!email || !password) {
-        errorBox.innerText = "Informe e-mail e senha.";
-        return;
-      }
-
-      loginBtn.disabled = true;
-      loginBtn.innerText = "Entrando...";
-
-      const { error } = await client.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      loginBtn.disabled = false;
-      loginBtn.innerText = "Entrar";
-
-      if (error) {
-        errorBox.innerText = "Login inválido. Verifique e-mail e senha.";
-        return;
-      }
-
-      loginBox.style.display = "none";
-      adminPanel.style.display = "block";
-
-      await loadMessages();
-    }
-
-    async function logout() {
-      setButtonsLoading(true);
-      await client.auth.signOut();
-      window.location.reload();
-    }
-
-    async function checkSession() {
-      const { data, error } = await client.auth.getSession();
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      if (data.session) {
-        loginBox.style.display = "none";
-        adminPanel.style.display = "block";
-        await loadMessages();
-      }
-    }
-
-    async function loadMessages() {
-      setButtonsLoading(true);
-      showLoader();
-      statusBox.innerText = "Carregando mensagens...";
-
-      const { data, error } = await client
-        .from("contacts")
-        .select("id, name, email, phone, job_type, message, created_at")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error(error);
-
-        statusBox.innerText = "Erro ao carregar mensagens.";
-        table.innerHTML = `
-          <tr>
-            <td colspan="6" class="empty-state">
-              Não foi possível carregar os dados. Verifique a tabela contacts e as políticas RLS no Supabase.
-            </td>
-          </tr>
-        `;
-
-        setButtonsLoading(false);
-        return;
-      }
-
-      messages = data || [];
-
-      populateFilter();
-      renderMessages();
-
-      setButtonsLoading(false);
-    }
-
-    function populateFilter() {
-      const currentValue = filterSelect.value;
-
-      filterSelect.innerHTML = `<option value="">Todas as vagas</option>`;
-
-      const jobs = [...new Set(messages.map(item => item.job_type).filter(Boolean))];
-
-      jobs.forEach(job => {
-        const option = document.createElement("option");
-        option.value = job;
-        option.textContent = job;
-        filterSelect.appendChild(option);
-      });
-
-      filterSelect.value = currentValue;
-    }
-
-    function renderMessages() {
-      const search = searchInput.value.toLowerCase().trim();
-      const selectedJob = filterSelect.value;
-
-      filteredMessages = messages.filter(item => {
-        const text = [
-          item.name,
-          item.email,
-          item.phone,
-          item.job_type,
-          item.message
-        ].join(" ").toLowerCase();
-
-        return text.includes(search) && (selectedJob === "" || item.job_type === selectedJob);
-      });
-
-      statusBox.innerText = `${filteredMessages.length} resultado(s) exibido(s) de ${messages.length} registro(s).`;
-
-      if (filteredMessages.length === 0) {
-        table.innerHTML = `
-          <tr>
-            <td colspan="6" class="empty-state">
-              Nenhuma mensagem encontrada.
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      table.innerHTML = filteredMessages.map((item, index) => `
-        <tr onclick="openModal(${index})">
-          <td>${safe(formatDate(item.created_at))}</td>
-          <td>${highlight(item.name, search)}</td>
-          <td>${highlight(item.email, search)}</td>
-          <td>${highlight(item.phone, search)}</td>
-          <td>${highlight(item.job_type, search)}</td>
-          <td class="message-cell">${highlight(item.message, search)}</td>
-        </tr>
-      `).join("");
-    }
-
-    function openModal(index) {
-      const item = filteredMessages[index];
-
-      if (!item) return;
-
-      document.getElementById("modalDate").innerText = formatDate(item.created_at);
-      document.getElementById("modalName").innerText = plain(item.name);
-      document.getElementById("modalEmail").innerText = plain(item.email);
-      document.getElementById("modalPhone").innerText = plain(item.phone);
-      document.getElementById("modalJob").innerText = plain(item.job_type);
-      document.getElementById("modalMessage").innerText = plain(item.message);
-
-      modal.classList.add("active");
-    }
-
-    function closeModal() {
-      modal.classList.remove("active");
-    }
-
-    function exportCSV() {
-      const dataToExport = filteredMessages.length ? filteredMessages : messages;
-
-      if (!dataToExport.length) {
-        alert("Não há mensagens para exportar.");
-        return;
-      }
-
-      const rows = [
-        ["Data", "Nome", "Email", "Telefone", "Vaga", "Mensagem"]
-      ];
-
-      dataToExport.forEach(item => {
-        rows.push([
-          formatDate(item.created_at),
-          item.name || "",
-          item.email || "",
-          item.phone || "",
-          item.job_type || "",
-          item.message || ""
-        ]);
-      });
-
-      const csv = rows
-        .map(row => row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(","))
-        .join("\n");
-
-      const blob = new Blob(["\uFEFF" + csv], {
-        type: "text/csv;charset=utf-8;"
-      });
-
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-
-      a.href = url;
-      a.download = "contatos.csv";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-
-      URL.revokeObjectURL(url);
-    }
-
-    searchInput.addEventListener("input", () => {
-      clearTimeout(debounceTimer);
-
-      debounceTimer = setTimeout(() => {
-        renderMessages();
-      }, 300);
-    });
-
-    filterSelect.addEventListener("change", renderMessages);
-
-    modal.addEventListener("click", event => {
-      if (event.target === modal) {
-        closeModal();
-      }
-    });
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
-        closeModal();
-      }
-    });
-
-    checkSession();
   </script>
 
 </body>
