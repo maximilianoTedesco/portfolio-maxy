@@ -3,51 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Painel Admin | Maxy Tedesco</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #020617;
-      color: white;
-      padding: 40px;
-    }
-
-    h1 {
-      color: #22d3ee;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 30px;
-      background: #0f172a;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    th, td {
-      padding: 14px;
-      border-bottom: 1px solid #334155;
-      text-align: left;
-    }
-
-    th {
-      background: #1e293b;
-      color: #22d3ee;
-    }
-
-    tr:hover {
-      background: #1e293b;
-    }
-
-    a {
-      color: #22d3ee;
-    }
+    body { margin:0; font-family:Arial; background:#020617; color:white; padding:40px; }
+    h1 { color:#22d3ee; font-size:42px; }
+    table { width:100%; border-collapse:collapse; margin-top:30px; background:#0f172a; border-radius:12px; overflow:hidden; }
+    th, td { padding:14px; border-bottom:1px solid #334155; text-align:left; }
+    th { background:#1e293b; color:#22d3ee; }
   </style>
 </head>
-
 <body>
 
 <h1>Painel Administrativo</h1>
@@ -65,59 +28,44 @@
     </tr>
   </thead>
   <tbody id="contactsTable">
-    <tr>
-      <td colspan="6">Carregando contatos...</td>
-    </tr>
+    <tr><td colspan="6">Carregando contatos...</td></tr>
   </tbody>
 </table>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
-  const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
+const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 
-  const client = window.supabase.createClient(supabaseUrl, supabaseKey);
-  const table = document.getElementById("contactsTable");
+const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+const table = document.getElementById("contactsTable");
 
-  async function loadContacts() {
-    const { data, error } = await client
-      .from("contatos")
-      .select("*")
-      .order("criado_em", { ascending: false });
+async function loadContacts() {
+  const { data, error } = await client
+    .from("contatos")
+    .select("*")
+    .order("criado_em", { ascending: false });
 
-    if (error) {
-      table.innerHTML = `
-        <tr>
-          <td colspan="6">Erro ao carregar contatos.</td>
-        </tr>
-      `;
-      console.log(error);
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      table.innerHTML = `
-        <tr>
-          <td colspan="6">Nenhum contato encontrado.</td>
-        </tr>
-      `;
-      return;
-    }
-
-    table.innerHTML = data.map(contact => `
-      <tr>
-        <td>${contact.criado_em ? new Date(contact.criado_em).toLocaleString("pt-BR") : ""}</td>
-        <td>${contact.name || ""}</td>
-        <td>${contact.email || ""}</td>
-        <td>${contact.phone || ""}</td>
-        <td>${contact.tipo_de_trabalho || ""}</td>
-        <td>${contact.mensagem || ""}</td>
-      </tr>
-    `).join("");
+  if (error) {
+    table.innerHTML = `<tr><td colspan="6">Erro: ${error.message}</td></tr>`;
+    console.log(error);
+    return;
   }
 
-  loadContacts();
+  table.innerHTML = data.map(c => `
+    <tr>
+      <td>${c.criado_em ? new Date(c.criado_em).toLocaleString("pt-BR") : ""}</td>
+      <td>${c.name || ""}</td>
+      <td>${c.email || ""}</td>
+      <td>${c.phone || ""}</td>
+      <td>${c.tipo_de_trabalho || ""}</td>
+      <td>${c.mensagem || ""}</td>
+    </tr>
+  `).join("");
+}
+
+loadContacts();
 </script>
 
 </body>
