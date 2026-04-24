@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maxy Tedesco</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maxy Tedesco | Tecnologia, Dados e IA</title>
 
 <style>
 * {
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 html {
@@ -18,171 +18,432 @@ html {
 }
 
 body {
-  background:#020617;
-  color:#fff;
+  background: #020617;
+  color: #ffffff;
 }
 
-/* NAVBAR */
+a {
+  text-decoration: none;
+}
+
+p {
+  color: #cbd5e1;
+  line-height: 1.7;
+  font-size: 17px;
+}
+
+h2 {
+  font-size: 42px;
+  margin-bottom: 20px;
+}
+
+section {
+  padding: 100px 60px;
+}
+
+.container {
+  max-width: 1150px;
+  margin: auto;
+}
+
+/* NAV */
 nav {
-  position:fixed;
-  top:0;
-  width:100%;
-  padding:20px 60px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:rgba(2,6,23,0.6);
-  backdrop-filter:blur(10px);
-  z-index:999;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(2, 6, 23, 0.7);
+  backdrop-filter: blur(14px);
+  z-index: 999;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: bold;
+  color: white;
 }
 
 nav a {
-  margin-left:20px;
-  text-decoration:none;
-  color:#cbd5e1;
-  font-weight:bold;
+  color: #cbd5e1;
+  margin-left: 28px;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
 nav a:hover {
-  color:#22d3ee;
+  color: #22d3ee;
 }
 
 /* HERO */
 .hero {
-  height:100vh;
+  height: 100vh;
   background:
-    linear-gradient(rgba(2,6,23,0.7), rgba(2,6,23,0.9)),
+    linear-gradient(rgba(2,6,23,0.62), rgba(2,6,23,0.92)),
     url("hero.jpg");
-  background-size:cover;
-  background-position:center right;
-  display:flex;
-  align-items:center;
-  padding:0 60px;
+  background-size: cover;
+  background-position: center right;
+  display: flex;
+  align-items: center;
+  padding: 0 90px;
 }
 
 .hero-content {
-  max-width:600px;
+  max-width: 700px;
+  animation: fadeUp 1s ease;
 }
 
 .hero h1 {
-  font-size:60px;
-  margin-bottom:20px;
+  font-size: clamp(46px, 7vw, 82px);
+  line-height: 1.05;
+  margin-bottom: 25px;
+  text-shadow: 0 8px 30px rgba(0,0,0,0.6);
 }
 
 .hero h2 {
-  color:#cbd5e1;
-  margin-bottom:30px;
+  font-size: 30px;
+  color: #e2e8f0;
+  margin-bottom: 35px;
+  text-shadow: 0 5px 20px rgba(0,0,0,0.6);
 }
 
-/* BUTTON */
 .btn {
-  padding:15px 30px;
-  background:#22d3ee;
-  color:#000;
-  border-radius:10px;
-  text-decoration:none;
-  font-weight:bold;
-  border:none;
-  cursor:pointer;
+  display: inline-block;
+  padding: 16px 34px;
+  background: #22d3ee;
+  color: #020617;
+  border-radius: 14px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 16px;
 }
 
-/* SECTIONS */
-section {
-  padding:100px 60px;
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(34,211,238,0.28);
+}
+
+/* ABOUT */
+.about {
+  background: #020617;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 35px;
+  align-items: center;
+}
+
+.about-card {
+  background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(15,23,42,0.75));
+  padding: 36px;
+  border-radius: 26px;
+  border: 1px solid rgba(34,211,238,0.16);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.35);
+}
+
+.about-highlight {
+  display: grid;
+  gap: 18px;
+}
+
+.highlight-item {
+  background: rgba(15,23,42,0.85);
+  border: 1px solid rgba(148,163,184,0.18);
+  padding: 22px;
+  border-radius: 18px;
+}
+
+.highlight-item h3 {
+  color: #67e8f9;
+  margin-bottom: 8px;
+}
+
+/* SERVICES */
+.services {
+  background: #050b1d;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(15,23,42,0.95), rgba(15,23,42,0.72));
+  padding: 30px;
+  border-radius: 24px;
+  border: 1px solid rgba(148,163,184,0.16);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(34,211,238,0.4);
+}
+
+.card h3 {
+  color: #67e8f9;
+  margin-bottom: 12px;
+}
+
+/* PARALLAX */
+.parallax {
+  min-height: 380px;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.parallax::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(2,6,23,0.92), rgba(2,6,23,0.55));
+}
+
+.parallax-content {
+  position: relative;
+  z-index: 2;
+  max-width: 750px;
+}
+
+.parallax h2 {
+  font-size: 48px;
+}
+
+.parallax-tech {
+  background-image: url("https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920");
+}
+
+.parallax-data {
+  background-image: url("https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1920");
+}
+
+/* PORTFOLIO */
+.portfolio {
+  background: #020617;
+}
+
+.project-card {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tag {
+  display: inline-block;
+  color: #22d3ee;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 12px;
 }
 
 /* CONTACT */
 #contact {
-  scroll-margin-top:100px;
+  scroll-margin-top: 100px;
+  background: #050b1d;
 }
 
 .contact-container {
-  max-width:700px;
-  margin:auto;
-  text-align:center;
+  max-width: 780px;
+  margin: auto;
+  text-align: center;
 }
 
 .contact-form {
-  background:#0f172a;
-  padding:30px;
-  border-radius:20px;
-  margin-top:20px;
-  border:1px solid rgba(255,255,255,0.05);
-
-  opacity:0;
-  transform:translateY(30px);
-  transition:0.6s;
+  margin-top: 30px;
+  background: linear-gradient(180deg, rgba(15,23,42,0.98), rgba(15,23,42,0.78));
+  padding: 38px;
+  border-radius: 28px;
+  border: 1px solid rgba(34,211,238,0.18);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.45);
+  opacity: 0;
+  transform: translateY(35px);
+  transition: all 0.8s ease;
 }
 
 .contact-form.show {
-  opacity:1;
-  transform:translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .form-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 .contact-form input,
 .contact-form textarea {
-  width:100%;
-  padding:14px;
-  margin:10px 0;
-  border-radius:10px;
-  border:none;
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(148,163,184,0.25);
+  background: rgba(2,6,23,0.85);
+  color: white;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #22d3ee;
+  box-shadow: 0 0 0 4px rgba(34,211,238,0.12);
 }
 
 .contact-form textarea {
-  min-height:120px;
+  min-height: 140px;
+  resize: vertical;
 }
 
 .contact-form .btn {
-  width:100%;
+  width: 100%;
 }
 
-/* MESSAGE */
 .message-box {
-  display:none;
-  margin-top:15px;
-  padding:12px;
-  border-radius:10px;
+  display: none;
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: bold;
 }
 
 .success {
-  display:block;
-  background:rgba(34,197,94,0.2);
-  color:#22c55e;
+  display: block;
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+  border: 1px solid #22c55e;
 }
 
 .error {
-  display:block;
-  background:rgba(239,68,68,0.2);
-  color:#ef4444;
+  display: block;
+  background: rgba(239,68,68,0.15);
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+/* WHATSAPP */
+.whatsapp {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #25d366;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  z-index: 999;
+  box-shadow: 0 14px 35px rgba(37,211,102,0.35);
+}
+
+/* FOOTER */
+footer {
+  padding: 30px;
+  text-align: center;
+  color: #94a3b8;
+  background: #020617;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ANIMAÇÕES */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(35px);
+  transition: all 0.8s ease;
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* RESPONSIVO */
-@media(max-width:800px){
-  nav {padding:15px;}
-  .hero {padding:20px;}
-  .form-grid {grid-template-columns:1fr;}
+@media(max-width: 900px) {
+  nav {
+    padding: 16px 22px;
+  }
+
+  nav div:last-child {
+    display: none;
+  }
+
+  section {
+    padding: 80px 24px;
+  }
+
+  .hero {
+    padding: 0 24px;
+    background-position: center right;
+  }
+
+  .about-grid,
+  .grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 46px;
+  }
+
+  .hero h2 {
+    font-size: 23px;
+  }
+
+  .parallax {
+    background-attachment: scroll;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <nav>
-  <div><strong>Maxy</strong></div>
+  <div class="logo">Maxy</div>
   <div>
+    <a href="#about">Sobre</a>
+    <a href="#services">Serviços</a>
+    <a href="#portfolio">Projetos</a>
     <a href="#contact">Contato</a>
     <a href="admin.html">Admin</a>
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-content">
     <h1>Soluções que geram resultados</h1>
@@ -191,94 +452,256 @@ section {
   </div>
 </section>
 
-<!-- CONTACT -->
+<section id="about" class="about">
+  <div class="container about-grid reveal">
+    <div>
+      <h2>Sobre mim</h2>
+      <p>
+        Sou um profissional de tecnologia com experiência em suporte ao usuário,
+        sistemas corporativos, SQL Server, análise de dados, ERP e automações com
+        inteligência artificial.
+      </p>
+      <br>
+      <p>
+        Meu foco é atuar de forma prática e estratégica: entender o problema,
+        organizar as informações, propor soluções claras e gerar resultado real
+        para empresas, equipes e usuários.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <div class="about-highlight">
+        <div class="highlight-item">
+          <h3>Suporte técnico e sistemas</h3>
+          <p>Atendimento, análise de incidentes, melhoria de processos e apoio direto ao usuário.</p>
+        </div>
+
+        <div class="highlight-item">
+          <h3>Banco de dados e ERP</h3>
+          <p>Experiência com SQL Server, consultas, validações e apoio em ajustes de sistemas.</p>
+        </div>
+
+        <div class="highlight-item">
+          <h3>Dados e Inteligência Artificial</h3>
+          <p>Uso de dados, automações e ferramentas de IA para produtividade e tomada de decisão.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="parallax parallax-tech">
+  <div class="container parallax-content">
+    <h2>Tecnologia aplicada ao negócio</h2>
+    <p>
+      Soluções digitais precisam ser funcionais, bem estruturadas e pensadas para resolver problemas reais.
+    </p>
+  </div>
+</section>
+
+<section id="services" class="services">
+  <div class="container reveal">
+    <div class="section-title">
+      <h2>Serviços</h2>
+      <p>Áreas em que posso contribuir com soluções técnicas e visão prática de negócio.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Suporte ao usuário</h3>
+        <p>Atendimento, troubleshooting, documentação, análise de chamados e resolução de problemas.</p>
+      </div>
+
+      <div class="card">
+        <h3>SQL Server</h3>
+        <p>Consultas, validações, análise de dados, apoio em ERP e rotinas relacionadas a banco de dados.</p>
+      </div>
+
+      <div class="card">
+        <h3>Automação com IA</h3>
+        <p>Uso de inteligência artificial para otimizar processos, organizar fluxos e aumentar produtividade.</p>
+      </div>
+
+      <div class="card">
+        <h3>Análise de dados</h3>
+        <p>Organização, leitura e interpretação de informações para apoiar decisões mais assertivas.</p>
+      </div>
+
+      <div class="card">
+        <h3>Sistemas corporativos</h3>
+        <p>Apoio operacional e técnico em sistemas internos, ERP e ferramentas administrativas.</p>
+      </div>
+
+      <div class="card">
+        <h3>Melhoria de processos</h3>
+        <p>Identificação de gargalos, padronização de rotinas e criação de soluções simples e eficientes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="parallax parallax-data">
+  <div class="container parallax-content">
+    <h2>Dados, sistemas e automação</h2>
+    <p>
+      A combinação entre suporte, banco de dados e IA permite criar soluções mais rápidas,
+      inteligentes e conectadas com a operação.
+    </p>
+  </div>
+</section>
+
+<section id="portfolio" class="portfolio">
+  <div class="container reveal">
+    <div class="section-title">
+      <h2>Projetos e frentes de atuação</h2>
+      <p>Exemplos de áreas onde aplico tecnologia de forma prática.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card project-card">
+        <div>
+          <span class="tag">SUPORTE</span>
+          <h3>Painel administrativo</h3>
+          <p>Interface para controle de mensagens, contatos e oportunidades recebidas pelo site.</p>
+        </div>
+      </div>
+
+      <div class="card project-card">
+        <div>
+          <span class="tag">DADOS</span>
+          <h3>Consultas e validações SQL</h3>
+          <p>Apoio em banco de dados, conferência de informações e suporte a sistemas ERP.</p>
+        </div>
+      </div>
+
+      <div class="card project-card">
+        <div>
+          <span class="tag">IA</span>
+          <h3>Automação de processos</h3>
+          <p>Uso de ferramentas inteligentes para reduzir tarefas repetitivas e organizar fluxos de trabalho.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="contact">
   <div class="contact-container">
     <h2>Contato</h2>
+    <p>Envie sua proposta, oportunidade ou mensagem profissional.</p>
 
     <form id="contactForm" class="contact-form">
       <div class="form-grid">
-        <input name="name" placeholder="Nome" required>
-        <input name="email" type="email" placeholder="Email" required>
+        <input name="name" placeholder="Nome" required />
+        <input name="email" type="email" placeholder="Email" required />
       </div>
 
       <div class="form-grid">
-        <input name="phone" placeholder="Telefone">
-        <input name="job_type" placeholder="Tipo de oportunidade" required>
+        <input name="phone" placeholder="Telefone / WhatsApp" />
+        <input name="job_type" placeholder="Tipo de oportunidade" required />
       </div>
 
       <textarea name="message" placeholder="Mensagem"></textarea>
 
-      <button id="submitBtn" class="btn">Enviar mensagem</button>
+      <button id="submitBtn" class="btn" type="submit">Enviar mensagem</button>
 
       <div id="formMessage" class="message-box"></div>
     </form>
   </div>
 </section>
 
-<!-- SUPABASE -->
+<a class="whatsapp" href="https://wa.me/SEUNUMERO" target="_blank">💬</a>
+
+<footer>
+  © 2026 Maxy Tedesco. Todos os direitos reservados.
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-const client = supabase.createClient(
-  "https://kdgjfzsimvtgckialfpe.supabase.co",
-  "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L"
-);
+const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
+const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+
+const client = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 const form = document.getElementById("contactForm");
-const btn = document.getElementById("submitBtn");
-const msg = document.getElementById("formMessage");
+const submitBtn = document.getElementById("submitBtn");
+const formMessage = document.getElementById("formMessage");
 
-function showMessage(type,text){
-  msg.className="message-box "+type;
-  msg.innerText=text;
+function showMessage(type, text) {
+  formMessage.className = "message-box " + type;
+  formMessage.innerText = text;
 }
 
-form.addEventListener("submit", async (e)=>{
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  btn.innerText="Enviando...";
-  btn.disabled=true;
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Enviando...";
+  formMessage.className = "message-box";
+  formMessage.innerText = "";
 
-  const data={
-    name:form.name.value,
-    email:form.email.value,
-    phone:form.phone.value,
-    job_type:form.job_type.value,
-    message:form.message.value
+  const data = {
+    name: form.name.value.trim(),
+    email: form.email.value.trim(),
+    phone: form.phone.value.trim(),
+    job_type: form.job_type.value.trim(),
+    message: form.message.value.trim()
   };
 
-  const {error}=await client.from("contacts").insert([data]);
+  const { error } = await client
+    .from("contacts")
+    .insert([data]);
 
-  if(error){
-    showMessage("error","Erro ao enviar");
-    btn.disabled=false;
-    btn.innerText="Enviar mensagem";
+  if (error) {
+    console.error("Supabase error:", error);
+    showMessage("error", "Erro ao salvar contato. Tente novamente.");
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Enviar mensagem";
     return;
   }
 
-  await fetch("/api/send-email",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify(data)
-  });
+  try {
+    const emailResponse = await fetch("/api/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
 
-  form.reset();
-  showMessage("success","Mensagem enviada com sucesso!");
-  btn.disabled=false;
-  btn.innerText="Enviar mensagem";
+    if (!emailResponse.ok) {
+      showMessage("error", "Contato salvo, mas houve erro na notificação por email.");
+      submitBtn.disabled = false;
+      submitBtn.innerText = "Enviar mensagem";
+      return;
+    }
+
+    form.reset();
+    showMessage("success", "Mensagem enviada com sucesso!");
+  } catch (err) {
+    console.error("Email API error:", err);
+    showMessage("error", "Contato salvo, mas houve erro na notificação por email.");
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.innerText = "Enviar mensagem";
 });
 
-/* ANIMAÇÃO AO CHEGAR NO FORM */
-const observer = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      document.querySelector(".contact-form").classList.add("show");
+/* ANIMAÇÕES AO ROLAR */
+const animatedItems = document.querySelectorAll(".reveal, .contact-form");
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
     }
   });
-},{threshold:0.3});
+}, {
+  threshold: 0.18
+});
 
-observer.observe(document.querySelector(".contact-form"));
+animatedItems.forEach(item => observer.observe(item));
 </script>
 
 </body>
