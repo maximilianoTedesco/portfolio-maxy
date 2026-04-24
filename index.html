@@ -161,27 +161,51 @@ section {
 
 /* PARALLAX */
 .parallax {
-  min-height: 300px;
+  min-height: 360px;
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .parallax::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(2,6,23,0.7);
+  background: linear-gradient(
+    to right,
+    rgba(2,6,23,0.88),
+    rgba(2,6,23,0.55)
+  );
+  z-index: 1;
 }
 
 .parallax-content {
   position: relative;
   z-index: 2;
-  max-width: 700px;
+  max-width: 750px;
 }
 
+.parallax-content h2 {
+  font-size: 44px;
+  margin-bottom: 15px;
+}
+
+.parallax-content p {
+  font-size: 18px;
+  color: #e2e8f0;
+}
+
+.parallax-tech {
+  background-image: url("https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920");
+}
+
+.parallax-data {
+  background-image: url("https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1920");
+}
 /* FORM */
 .contact-container {
   max-width: 700px;
