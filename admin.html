@@ -121,6 +121,10 @@
       background: #1e293b;
     }
 
+    tbody tr {
+      cursor: pointer;
+    }
+
     #adminPanel {
       display: none;
     }
@@ -138,8 +142,9 @@
 
     .message-cell {
       max-width: 350px;
-      white-space: pre-wrap;
-      word-break: break-word;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .loader {
@@ -172,6 +177,92 @@
       border-radius: 3px;
     }
 
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.78);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      width: 100%;
+      max-width: 760px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.55);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #ef4444;
+      color: #fff;
+      border-radius: 6px;
+      padding: 7px 11px;
+    }
+
+    .modal-close:hover {
+      background: #f87171;
+    }
+
+    .modal h2 {
+      color: #22d3ee;
+      margin-top: 0;
+      margin-bottom: 18px;
+      padding-right: 80px;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 18px;
+      margin-bottom: 18px;
+    }
+
+    .modal-info {
+      background: #020617;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+    }
+
+    .modal-info strong {
+      color: #22d3ee;
+      display: block;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+
+    .modal-message-title {
+      color: #22d3ee;
+      margin: 12px 0 8px;
+      font-weight: bold;
+    }
+
+    .modal-message {
+      background: #020617;
+      border: 1px solid #1e293b;
+      padding: 14px;
+      border-radius: 8px;
+      max-height: 320px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.5;
+    }
+
     @media (max-width: 768px) {
       body {
         padding: 20px;
@@ -185,6 +276,14 @@
       .filters select,
       .filters button {
         width: 100%;
+      }
+
+      .modal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        padding: 20px;
       }
     }
   </style>
@@ -244,6 +343,44 @@
     </div>
   </div>
 
+  <div id="messageModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">Fechar</button>
+
+      <h2>Detalhes da Mensagem</h2>
+
+      <div class="modal-grid">
+        <div class="modal-info">
+          <strong>Data</strong>
+          <span id="modalDate">-</span>
+        </div>
+
+        <div class="modal-info">
+          <strong>Nome</strong>
+          <span id="modalName">-</span>
+        </div>
+
+        <div class="modal-info">
+          <strong>Email</strong>
+          <span id="modalEmail">-</span>
+        </div>
+
+        <div class="modal-info">
+          <strong>Telefone</strong>
+          <span id="modalPhone">-</span>
+        </div>
+
+        <div class="modal-info">
+          <strong>Vaga</strong>
+          <span id="modalJob">-</span>
+        </div>
+      </div>
+
+      <div class="modal-message-title">Mensagem completa</div>
+      <div id="modalMessage" class="modal-message">-</div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -260,6 +397,7 @@
     const searchInput = document.getElementById("search");
     const filterSelect = document.getElementById("filter");
     const loginBtn = document.getElementById("loginBtn");
+    const modal = document.getElementById("messageModal");
 
     let messages = [];
     let filteredMessages = [];
@@ -274,6 +412,11 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+    }
+
+    function plain(value) {
+      if (value === null || value === undefined || value === "") return "-";
+      return String(value);
     }
 
     function formatDate(value) {
@@ -455,8 +598,8 @@
         return;
       }
 
-      table.innerHTML = filteredMessages.map(item => `
-        <tr>
+      table.innerHTML = filteredMessages.map((item, index) => `
+        <tr onclick="openModal(${index})">
           <td>${safe(formatDate(item.created_at))}</td>
           <td>${highlight(item.name, search)}</td>
           <td>${highlight(item.email, search)}</td>
@@ -465,6 +608,25 @@
           <td class="message-cell">${highlight(item.message, search)}</td>
         </tr>
       `).join("");
+    }
+
+    function openModal(index) {
+      const item = filteredMessages[index];
+
+      if (!item) return;
+
+      document.getElementById("modalDate").innerText = formatDate(item.created_at);
+      document.getElementById("modalName").innerText = plain(item.name);
+      document.getElementById("modalEmail").innerText = plain(item.email);
+      document.getElementById("modalPhone").innerText = plain(item.phone);
+      document.getElementById("modalJob").innerText = plain(item.job_type);
+      document.getElementById("modalMessage").innerText = plain(item.message);
+
+      modal.classList.add("active");
+    }
+
+    function closeModal() {
+      modal.classList.remove("active");
     }
 
     function exportCSV() {
@@ -519,6 +681,18 @@
     });
 
     filterSelect.addEventListener("change", renderMessages);
+
+    modal.addEventListener("click", event => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    });
 
     checkSession();
   </script>
