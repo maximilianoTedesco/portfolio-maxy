@@ -7,6 +7,7 @@
 
   <style>
     body { margin: 0; font-family: Arial, sans-serif; background: #020617; color: white; }
+
     .admin-btn {
       position: fixed;
       top: 20px;
@@ -20,7 +21,9 @@
       z-index: 999;
       border: 1px solid #22d3ee;
     }
+
     section { padding: 100px 20px; text-align: center; }
+
     .hero {
       height: 100vh;
       background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)),
@@ -32,7 +35,9 @@
       justify-content: center;
       flex-direction: column;
     }
+
     h1 { font-size: 56px; margin-bottom: 10px; }
+
     .btn {
       padding: 15px 30px;
       background: #22d3ee;
@@ -45,6 +50,7 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     input, textarea {
       width: 100%;
       padding: 14px;
@@ -54,8 +60,11 @@
       box-sizing: border-box;
       font-size: 16px;
     }
+
     textarea { min-height: 120px; }
+
     .container { max-width: 600px; margin: auto; }
+
     .card {
       background: #0f172a;
       padding: 30px;
@@ -79,7 +88,7 @@
 <section>
   <h2>About Me</h2>
   <p>
-    Technology professional with experience in technical support, systems, SQL Server,
+    Technology professional with experience in support, systems, SQL Server,
     data analysis and artificial intelligence.
   </p>
 </section>
@@ -89,23 +98,23 @@
 
   <div class="card">
     <h3>Data Analysis</h3>
-    <p>Data organization, interpretation and analysis to support decision-making.</p>
+    <p>Data organization and analysis to support decisions.</p>
   </div>
 
   <div class="card">
-    <h3>SQL Server & Databases</h3>
-    <p>Experience with SQL Server, queries, ERP systems and technical support.</p>
+    <h3>SQL Server</h3>
+    <p>Experience with SQL queries, ERP and database support.</p>
   </div>
 
   <div class="card">
     <h3>Artificial Intelligence</h3>
-    <p>Development interest in automation, AI workflows and applied technology.</p>
+    <p>Automation, workflows and AI applied to business.</p>
   </div>
 </section>
 
 <section id="contact">
   <h2>Interested in My Profile?</h2>
-  <p>Leave your contact details and information about the opportunity.</p>
+  <p>Leave your contact details and opportunity information.</p>
 
   <div class="container">
     <form id="contactForm">
@@ -122,34 +131,54 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
-  const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
+const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 
-  const client = window.supabase.createClient(supabaseUrl, supabaseKey);
-  const form = document.getElementById("contactForm");
+const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+const form = document.getElementById("contactForm");
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    const data = {
-      name: form.name.value,
-      email: form.email.value,
-      phone: form.phone.value,
-      job_type: form.job_type.value,
-      message: form.message.value
-    };
+  const data = {
+    name: form.name.value,
+    email: form.email.value,
+    phone: form.phone.value,
+    job_type: form.job_type.value,
+    message: form.message.value
+  };
 
-    const { error } = await client
-      .from("contacts")
-      .insert([data]);
+  const { error } = await client
+    .from("contacts")
+    .insert([data]);
 
-    if (error) {
-      alert("Error sending contact: " + error.message);
-    } else {
-      alert("Contact sent successfully!");
-      form.reset();
-    }
-  });
+  if (error) {
+    alert("Error sending contact: " + error.message);
+    return;
+  }
+
+  const text = `
+New contact from portfolio:
+
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+Job Type: ${data.job_type}
+Message: ${data.message}
+`;
+
+  const encoded = encodeURIComponent(text);
+
+  // ALTERE AQUI COM SEU NÚMERO
+  // Exemplo: 5511999999999
+  const phoneNumber = "5551995527630";
+
+  window.open(`https://wa.me/${phoneNumber}?text=${encoded}`, "_blank");
+
+  form.reset();
+
+  alert("Contact sent! Redirecting to WhatsApp...");
+});
 </script>
 
 </body>
