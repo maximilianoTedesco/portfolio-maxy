@@ -304,10 +304,10 @@
         </tr>
       `;
 
-      const { data, error } = await client
-        .from("message")
-        .select("*")
-        .order("created_at", { ascending: false });
+    const { data, error } = await client
+      .from("contacts")
+      .select("*")
+      .order("created_at", { ascending: false });
 
       if (error) {
         console.error(error);
