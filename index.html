@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Maxy Tedesco | Portfólio</title>
+  <title>Maxy Tedesco | Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -31,7 +31,8 @@
     }
 
     h1 {
-      font-size: 50px;
+      font-size: 56px;
+      margin-bottom: 10px;
     }
 
     .btn {
@@ -44,20 +45,34 @@
       display: inline-block;
       border: none;
       cursor: pointer;
+      font-weight: bold;
     }
 
     input, textarea {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       margin: 10px 0;
       border-radius: 8px;
       border: none;
       box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 120px;
     }
 
     .container {
       max-width: 600px;
       margin: auto;
+    }
+
+    .card {
+      background: #0f172a;
+      padding: 30px;
+      border-radius: 16px;
+      margin: 20px auto;
+      max-width: 900px;
     }
   </style>
 </head>
@@ -66,29 +81,49 @@
 
 <section class="hero">
   <h1>Maxy Tedesco</h1>
-  <h2>Soluções que geram resultados</h2>
-  <a href="#contato" class="btn">Entrar em contato</a>
+  <h2>Technology, Data & AI Solutions That Deliver Results</h2>
+  <a href="#contact" class="btn">Get in Touch</a>
 </section>
 
 <section>
-  <h2>Sobre mim</h2>
+  <h2>About Me</h2>
   <p>
-    Profissional de tecnologia com experiência em suporte, sistemas e SQL Server.
-    Atualmente focado em análise de dados e inteligência artificial.
+    Technology professional with experience in technical support, systems, SQL Server,
+    data analysis and artificial intelligence.
   </p>
 </section>
 
-<section id="contato">
-  <h2>Contato</h2>
+<section>
+  <h2>Core Skills</h2>
+
+  <div class="card">
+    <h3>Data Analysis</h3>
+    <p>Data organization, interpretation and analysis to support decision-making.</p>
+  </div>
+
+  <div class="card">
+    <h3>SQL Server & Databases</h3>
+    <p>Experience with SQL Server, queries, ERP systems and technical support.</p>
+  </div>
+
+  <div class="card">
+    <h3>Artificial Intelligence</h3>
+    <p>Development interest in automation, AI workflows and applied technology.</p>
+  </div>
+</section>
+
+<section id="contact">
+  <h2>Interested in My Profile?</h2>
+  <p>Leave your contact details and information about the opportunity.</p>
 
   <div class="container">
     <form id="contactForm">
-      <input name="name" placeholder="Nome" required>
+      <input name="name" placeholder="Name" required>
       <input name="email" type="email" placeholder="Email" required>
-      <input name="phone" placeholder="Telefone">
-      <input name="job_type" placeholder="Tipo de vaga" required>
-      <textarea name="message" placeholder="Mensagem"></textarea>
-      <button class="btn" type="submit">Enviar</button>
+      <input name="phone" placeholder="Phone / WhatsApp">
+      <input name="tipo_de_trabalho" placeholder="Type of opportunity" required>
+      <textarea name="mensagem" placeholder="Message"></textarea>
+      <button class="btn" type="submit">Send Contact</button>
     </form>
   </div>
 </section>
@@ -100,7 +135,6 @@
   const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
 
   const client = window.supabase.createClient(supabaseUrl, supabaseKey);
-
   const form = document.getElementById("contactForm");
 
   form.addEventListener("submit", async (e) => {
@@ -110,8 +144,8 @@
       name: form.name.value,
       email: form.email.value,
       phone: form.phone.value,
-      job_type: form.job_type.value,
-      message: form.message.value
+      tipo_de_trabalho: form.tipo_de_trabalho.value,
+      mensagem: form.mensagem.value
     };
 
     const { error } = await client
@@ -119,10 +153,10 @@
       .insert([data]);
 
     if (error) {
-      alert("Erro ao enviar. Verifique o Supabase.");
+      alert("Error sending contact.");
       console.log(error);
     } else {
-      alert("Contato enviado com sucesso!");
+      alert("Contact sent successfully!");
       form.reset();
     }
   });
