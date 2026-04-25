@@ -60,7 +60,7 @@ nav a:hover {
   color: #22d3ee;
 }
 
-/* HERO */
+/* HERO AJUSTADO */
 .hero {
   height: 100vh;
   background:
@@ -167,13 +167,18 @@ section {
   display: flex;
   align-items: center;
   position: relative;
+  overflow: hidden;
 }
 
 .parallax::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(2,6,23,0.88), rgba(2,6,23,0.55));
+  background: linear-gradient(
+    to right,
+    rgba(2,6,23,0.88),
+    rgba(2,6,23,0.55)
+  );
   z-index: 1;
 }
 
@@ -181,6 +186,16 @@ section {
   position: relative;
   z-index: 2;
   max-width: 750px;
+}
+
+.parallax-content h2 {
+  font-size: 44px;
+  margin-bottom: 15px;
+}
+
+.parallax-content p {
+  font-size: 18px;
+  color: #e2e8f0;
 }
 
 .parallax-tech {
@@ -204,33 +219,44 @@ section {
   border-radius: 20px;
   margin-top: 20px;
   border: 1px solid rgba(255,255,255,0.05);
+
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.6s;
+}
+
+.contact-form.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 14px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   text-align: left;
+  margin-bottom: 14px;
 }
 
 .form-group label {
   font-size: 14px;
   color: #94a3b8;
   margin-bottom: 6px;
+  font-weight: 600;
 }
 
-/* inputs */
 .contact-form input,
 .contact-form textarea {
   width: 100%;
   padding: 14px;
   border-radius: 10px;
   border: none;
+  font-size: 16px;
 }
 
 .contact-form textarea {
@@ -239,7 +265,7 @@ section {
 
 .contact-form .btn {
   width: 100%;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 /* MENSAGEM */
@@ -262,12 +288,36 @@ section {
   color: #ef4444;
 }
 
+/* WHATSAPP */
+.whatsapp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25d366;
+  color: white;
+  padding: 16px;
+  border-radius: 50%;
+  z-index: 999;
+}
+
 /* RESPONSIVO */
 @media(max-width: 900px) {
-  nav { padding: 10px 20px; }
-  .hero { padding: 0 20px; }
-  .about-grid, .grid, .form-grid {
+  nav {
+    padding: 10px 20px;
+  }
+
+  .hero {
+    padding: 0 20px;
+  }
+
+  .about-grid,
+  .grid,
+  .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .parallax {
+    background-attachment: scroll;
   }
 }
 </style>
@@ -294,15 +344,146 @@ section {
   </div>
 </section>
 
+<section id="about" class="about">
+  <div class="container about-grid reveal">
+    <div>
+      <h2>Sobre mim</h2>
+      <p>
+        Sou um profissional de tecnologia com experiência em suporte ao usuário,
+        sistemas corporativos, SQL Server, análise de dados, ERP e automações com
+        inteligência artificial.
+      </p>
+      <br>
+      <p>
+        Meu foco é atuar de forma prática e estratégica: entender o problema,
+        organizar as informações, propor soluções claras e gerar resultado real
+        para empresas, equipes e usuários.
+      </p>
+    </div>
+
+    <div class="about-card">
+      <div class="about-highlight">
+        <div class="highlight-item">
+          <h3>Suporte técnico e sistemas</h3>
+          <p>Atendimento, análise de incidentes, melhoria de processos e apoio direto ao usuário.</p>
+        </div>
+
+        <div class="highlight-item">
+          <h3>Banco de dados e ERP</h3>
+          <p>Experiência com SQL Server, consultas, validações e apoio em ajustes de sistemas.</p>
+        </div>
+
+        <div class="highlight-item">
+          <h3>Dados e Inteligência Artificial</h3>
+          <p>Uso de dados, automações e ferramentas de IA para produtividade e tomada de decisão.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="parallax parallax-tech">
+  <div class="container parallax-content">
+    <h2>Tecnologia aplicada ao negócio</h2>
+    <p>
+      Soluções digitais precisam ser funcionais, bem estruturadas e pensadas para resolver problemas reais.
+    </p>
+  </div>
+</section>
+
+<section id="services" class="services">
+  <div class="container reveal">
+    <div class="section-title">
+      <h2>Serviços</h2>
+      <p>Áreas em que posso contribuir com soluções técnicas e visão prática de negócio.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Suporte ao usuário</h3>
+        <p>Atendimento, troubleshooting, documentação, análise de chamados e resolução de problemas.</p>
+      </div>
+
+      <div class="card">
+        <h3>SQL Server</h3>
+        <p>Consultas, validações, análise de dados, apoio em ERP e rotinas relacionadas a banco de dados.</p>
+      </div>
+
+      <div class="card">
+        <h3>Automação com IA</h3>
+        <p>Uso de inteligência artificial para otimizar processos, organizar fluxos e aumentar produtividade.</p>
+      </div>
+
+      <div class="card">
+        <h3>Análise de dados</h3>
+        <p>Organização, leitura e interpretação de informações para apoiar decisões mais assertivas.</p>
+      </div>
+
+      <div class="card">
+        <h3>Sistemas corporativos</h3>
+        <p>Apoio operacional e técnico em sistemas internos, ERP e ferramentas administrativas.</p>
+      </div>
+
+      <div class="card">
+        <h3>Melhoria de processos</h3>
+        <p>Identificação de gargalos, padronização de rotinas e criação de soluções simples e eficientes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="parallax parallax-data">
+  <div class="container parallax-content">
+    <h2>Dados, sistemas e automação</h2>
+    <p>
+      A combinação entre suporte, banco de dados e IA permite criar soluções mais rápidas,
+      inteligentes e conectadas com a operação.
+    </p>
+  </div>
+</section>
+
+<section id="portfolio" class="portfolio">
+  <div class="container reveal">
+    <div class="section-title">
+      <h2>Projetos e frentes de atuação</h2>
+      <p>Exemplos de áreas onde aplico tecnologia de forma prática.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card project-card">
+        <div>
+          <span class="tag">SUPORTE</span>
+          <h3>Painel administrativo</h3>
+          <p>Interface para controle de mensagens, contatos e oportunidades recebidas pelo site.</p>
+        </div>
+      </div>
+
+      <div class="card project-card">
+        <div>
+          <span class="tag">DADOS</span>
+          <h3>Consultas e validações SQL</h3>
+          <p>Apoio em banco de dados, conferência de informações e suporte a sistemas ERP.</p>
+        </div>
+      </div>
+
+      <div class="card project-card">
+        <div>
+          <span class="tag">IA</span>
+          <h3>Automação de processos</h3>
+          <p>Uso de ferramentas inteligentes para reduzir tarefas repetitivas e organizar fluxos de trabalho.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="contact">
   <div class="contact-container">
-
     <h2>Contato</h2>
+    <p>Envie sua proposta, oportunidade ou mensagem profissional.</p>
 
     <form id="contactForm" class="contact-form">
-
       <div class="form-grid">
-
         <div class="form-group">
           <label>Nome</label>
           <input name="name" required />
@@ -312,11 +493,9 @@ section {
           <label>Email</label>
           <input name="email" type="email" required />
         </div>
-
       </div>
 
       <div class="form-grid">
-
         <div class="form-group">
           <label>Telefone / WhatsApp</label>
           <input name="phone" />
@@ -326,7 +505,6 @@ section {
           <label>Tipo de oportunidade</label>
           <input name="job_type" required />
         </div>
-
       </div>
 
       <div class="form-group">
@@ -334,14 +512,106 @@ section {
         <textarea name="message"></textarea>
       </div>
 
-      <button id="submitBtn" class="btn">Enviar mensagem</button>
+      <button id="submitBtn" class="btn" type="submit">Enviar mensagem</button>
 
       <div id="formMessage" class="message-box"></div>
-
     </form>
-
   </div>
 </section>
+
+<a class="whatsapp" href="https://wa.me/SEUNUMERO" target="_blank">💬</a>
+
+<footer>
+  © 2026 Maxy Tedesco. Todos os direitos reservados.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
+const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
+
+const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+const form = document.getElementById("contactForm");
+const submitBtn = document.getElementById("submitBtn");
+const formMessage = document.getElementById("formMessage");
+
+function showMessage(type, text) {
+  formMessage.className = "message-box " + type;
+  formMessage.innerText = text;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Enviando...";
+  formMessage.className = "message-box";
+  formMessage.innerText = "";
+
+  const data = {
+    name: form.name.value.trim(),
+    email: form.email.value.trim(),
+    phone: form.phone.value.trim(),
+    job_type: form.job_type.value.trim(),
+    message: form.message.value.trim()
+  };
+
+  const { error } = await client
+    .from("contacts")
+    .insert([data]);
+
+  if (error) {
+    console.error("Supabase error:", error);
+    showMessage("error", "Erro ao salvar contato. Tente novamente.");
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Enviar mensagem";
+    return;
+  }
+
+  try {
+    const emailResponse = await fetch("/api/send-email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!emailResponse.ok) {
+      showMessage("error", "Contato salvo, mas houve erro na notificação por email.");
+      submitBtn.disabled = false;
+      submitBtn.innerText = "Enviar mensagem";
+      return;
+    }
+
+    form.reset();
+    showMessage("success", "Mensagem enviada com sucesso!");
+  } catch (err) {
+    console.error("Email API error:", err);
+    showMessage("error", "Contato salvo, mas houve erro na notificação por email.");
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.innerText = "Enviar mensagem";
+});
+
+/* ANIMAÇÕES AO ROLAR */
+const animatedItems = document.querySelectorAll(".reveal, .contact-form");
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+    }
+  });
+}, {
+  threshold: 0.18
+});
+
+animatedItems.forEach(item => observer.observe(item));
+</script>
 
 </body>
 </html>
