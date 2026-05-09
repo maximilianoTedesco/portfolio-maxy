@@ -1,600 +1,200 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Maxy Tedesco | Tecnologia, Dados e IA</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maxy Tedesco | Tecnologia, Dados e IA</title>
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: #020617;
-  color: #ffffff;
-}
-
-p {
-  color: #cbd5e1;
-  line-height: 1.7;
-}
-
-/* NAVBAR MAIS FINA */
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  padding: 12px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(2, 6, 23, 0.75);
-  backdrop-filter: blur(10px);
-  z-index: 999;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-nav a {
-  margin-left: 20px;
-  text-decoration: none;
-  color: #cbd5e1;
-  font-weight: bold;
-  font-size: 14px;
-  transition: 0.3s;
-}
-
-nav a:hover {
-  color: #22d3ee;
-}
-
-/* HERO AJUSTADO */
-.hero {
-  height: 100vh;
-  background:
-    linear-gradient(
-      to right,
-      rgba(2,6,23,0.65) 0%,
-      rgba(2,6,23,0.55) 30%,
-      rgba(2,6,23,0.25) 60%,
-      rgba(2,6,23,0.05) 100%
-    ),
-    url("hero.jpg");
-
-  background-size: cover;
-  background-position: right center;
-
-  display: flex;
-  align-items: center;
-  padding: 0 60px;
-}
-
-.hero-content {
-  max-width: 520px;
-}
-
-.hero h1 {
-  font-size: clamp(42px, 6vw, 70px);
-  margin-bottom: 20px;
-  text-shadow: 0 10px 40px rgba(0,0,0,0.7);
-}
-
-.hero h2 {
-  font-size: 22px;
-  color: #e2e8f0;
-  margin-bottom: 30px;
-  text-shadow: 0 5px 20px rgba(0,0,0,0.7);
-}
-
-/* BOTÃO */
-.btn {
-  padding: 14px 28px;
-  background: #22d3ee;
-  color: #020617;
-  border-radius: 12px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(34,211,238,0.25);
-}
-
-/* SECTIONS */
-section {
-  padding: 100px 40px;
-}
-
-.container {
-  max-width: 1100px;
-  margin: auto;
-}
-
-/* SOBRE */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 30px;
-}
-
-.about-card {
-  background: #0f172a;
-  padding: 30px;
-  border-radius: 20px;
-}
-
-/* CARDS */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.card {
-  background: #0f172a;
-  padding: 25px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(34,211,238,0.3);
-}
-
-/* PARALLAX */
-.parallax {
-  min-height: 360px;
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.parallax::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(2,6,23,0.88),
-    rgba(2,6,23,0.55)
-  );
-  z-index: 1;
-}
-
-.parallax-content {
-  position: relative;
-  z-index: 2;
-  max-width: 750px;
-}
-
-.parallax-content h2 {
-  font-size: 44px;
-  margin-bottom: 15px;
-}
-
-.parallax-content p {
-  font-size: 18px;
-  color: #e2e8f0;
-}
-
-.parallax-tech {
-  background-image: url("https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1920");
-}
-
-.parallax-data {
-  background-image: url("https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1920");
-}
-
-/* FORM */
-.contact-container {
-  max-width: 700px;
-  margin: auto;
-  text-align: center;
-}
-
-.contact-form {
-  background: #0f172a;
-  padding: 30px;
-  border-radius: 20px;
-  margin-top: 20px;
-  border: 1px solid rgba(255,255,255,0.05);
-
-  opacity: 0;
-  transform: translateY(30px);
-  transition: 0.6s;
-}
-
-.contact-form.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  margin-bottom: 14px;
-}
-
-.form-group label {
-  font-size: 14px;
-  color: #94a3b8;
-  margin-bottom: 6px;
-  font-weight: 600;
-}
-
-.contact-form input,
-.contact-form textarea {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-}
-
-.contact-form textarea {
-  min-height: 120px;
-}
-
-.contact-form .btn {
-  width: 100%;
-  margin-top: 10px;
-}
-
-/* MENSAGEM */
-.message-box {
-  display: none;
-  margin-top: 15px;
-  padding: 12px;
-  border-radius: 10px;
-}
-
-.success {
-  display: block;
-  background: rgba(34,197,94,0.2);
-  color: #22c55e;
-}
-
-.error {
-  display: block;
-  background: rgba(239,68,68,0.2);
-  color: #ef4444;
-}
-
-/* WHATSAPP */
-.whatsapp {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #25d366;
-  color: white;
-  padding: 16px;
-  border-radius: 50%;
-  z-index: 999;
-}
-
-/* RESPONSIVO */
-@media(max-width: 900px) {
-  nav {
-    padding: 10px 20px;
-  }
-
-  .hero {
-    padding: 0 20px;
-  }
-
-  .about-grid,
-  .grid,
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .parallax {
-    background-attachment: scroll;
-  }
-}
-</style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
-<nav>
-  <div class="logo">Maxy</div>
-  <div>
-    <a href="#about">Sobre</a>
-    <a href="#services">Serviços</a>
-    <a href="#portfolio">Projetos</a>
-    <a href="#contact">Contato</a>
-    <a href="admin.html">Admin</a>
-  </div>
-</nav>
+  <nav>
+    <div class="logo">Maxy</div>
 
-<section class="hero">
-  <div class="hero-content">
-    <h1>Soluções que geram resultados</h1>
-    <h2>Transformando tecnologia em resultados reais</h2>
-    <a href="#contact" class="btn">Entrar em contato</a>
-  </div>
-</section>
-
-<section id="about" class="about">
-  <div class="container about-grid reveal">
     <div>
-      <h2>Sobre mim</h2>
+      <a href="#about">Sobre</a>
+      <a href="#services">Serviços</a>
+      <a href="#portfolio">Projetos</a>
+      <a href="#contact">Contato</a>
+      <a href="admin.html">Admin</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Soluções que geram resultados</h1>
+      <h2>Transformando tecnologia em resultados reais</h2>
+      <a href="#contact" class="btn">Entrar em contato</a>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="container about-grid reveal">
+      <div>
+        <h2>Sobre mim</h2>
+
+        <p>
+          Sou um profissional de tecnologia com experiência em suporte ao usuário,
+          sistemas corporativos, SQL Server, análise de dados, ERP e automações com
+          inteligência artificial.
+        </p>
+
+        <br />
+
+        <p>
+          Meu foco é atuar de forma prática e estratégica: entender o problema,
+          organizar as informações, propor soluções claras e gerar resultado real
+          para empresas, equipes e usuários.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <div class="about-highlight">
+          <div class="highlight-item">
+            <h3>Suporte técnico e sistemas</h3>
+            <p>Atendimento, análise de incidentes, melhoria de processos e apoio direto ao usuário.</p>
+          </div>
+
+          <div class="highlight-item">
+            <h3>Banco de dados e ERP</h3>
+            <p>Experiência com SQL Server, consultas, validações e apoio em ajustes de sistemas.</p>
+          </div>
+
+          <div class="highlight-item">
+            <h3>Dados e Inteligência Artificial</h3>
+            <p>Uso de dados, automações e ferramentas de IA para produtividade e tomada de decisão.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="parallax parallax-tech">
+    <div class="container parallax-content">
+      <h2>Tecnologia aplicada ao negócio</h2>
       <p>
-        Sou um profissional de tecnologia com experiência em suporte ao usuário,
-        sistemas corporativos, SQL Server, análise de dados, ERP e automações com
-        inteligência artificial.
+        Soluções digitais precisam ser funcionais, bem estruturadas e pensadas para resolver problemas reais.
       </p>
-      <br>
+    </div>
+  </section>
+
+  <section id="services" class="services">
+    <div class="container reveal">
+      <div class="section-title">
+        <h2>Serviços</h2>
+        <p>Áreas em que posso contribuir com soluções técnicas e visão prática de negócio.</p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Suporte ao usuário</h3>
+          <p>Atendimento, troubleshooting, documentação, análise de chamados e resolução de problemas.</p>
+        </div>
+
+        <div class="card">
+          <h3>SQL Server</h3>
+          <p>Consultas, validações, análise de dados, apoio em ERP e rotinas relacionadas a banco de dados.</p>
+        </div>
+
+        <div class="card">
+          <h3>Automação com IA</h3>
+          <p>Uso de inteligência artificial para otimizar processos, organizar fluxos e aumentar produtividade.</p>
+        </div>
+
+        <div class="card">
+          <h3>Análise de dados</h3>
+          <p>Organização, leitura e interpretação de informações para apoiar decisões mais assertivas.</p>
+        </div>
+
+        <div class="card">
+          <h3>Sistemas corporativos</h3>
+          <p>Apoio operacional e técnico em sistemas internos, ERP e ferramentas administrativas.</p>
+        </div>
+
+        <div class="card">
+          <h3>Melhoria de processos</h3>
+          <p>Identificação de gargalos, padronização de rotinas e criação de soluções simples e eficientes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="parallax parallax-data">
+    <div class="container parallax-content">
+      <h2>Dados, sistemas e automação</h2>
       <p>
-        Meu foco é atuar de forma prática e estratégica: entender o problema,
-        organizar as informações, propor soluções claras e gerar resultado real
-        para empresas, equipes e usuários.
+        A combinação entre suporte, banco de dados e IA permite criar soluções mais rápidas,
+        inteligentes e conectadas com a operação.
       </p>
     </div>
+  </section>
 
-    <div class="about-card">
-      <div class="about-highlight">
-        <div class="highlight-item">
-          <h3>Suporte técnico e sistemas</h3>
-          <p>Atendimento, análise de incidentes, melhoria de processos e apoio direto ao usuário.</p>
+  <section id="portfolio" class="portfolio">
+    <div class="container reveal">
+      <div class="section-title">
+        <h2>Projetos e frentes de atuação</h2>
+        <p>Exemplos de áreas onde aplico tecnologia de forma prática.</p>
+      </div>
+
+      <div class="grid">
+        <div class="card project-card">
+          <div>
+            <span class="tag">SUPORTE</span>
+            <h3>Painel administrativo</h3>
+            <p>Interface para controle de mensagens, contatos e oportunidades recebidas pelo site.</p>
+          </div>
         </div>
 
-        <div class="highlight-item">
-          <h3>Banco de dados e ERP</h3>
-          <p>Experiência com SQL Server, consultas, validações e apoio em ajustes de sistemas.</p>
+        <div class="card project-card">
+          <div>
+            <span class="tag">DADOS</span>
+            <h3>Consultas e validações SQL</h3>
+            <p>Apoio em banco de dados, conferência de informações e suporte a sistemas ERP.</p>
+          </div>
         </div>
 
-        <div class="highlight-item">
-          <h3>Dados e Inteligência Artificial</h3>
-          <p>Uso de dados, automações e ferramentas de IA para produtividade e tomada de decisão.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="parallax parallax-tech">
-  <div class="container parallax-content">
-    <h2>Tecnologia aplicada ao negócio</h2>
-    <p>
-      Soluções digitais precisam ser funcionais, bem estruturadas e pensadas para resolver problemas reais.
-    </p>
-  </div>
-</section>
-
-<section id="services" class="services">
-  <div class="container reveal">
-    <div class="section-title">
-      <h2>Serviços</h2>
-      <p>Áreas em que posso contribuir com soluções técnicas e visão prática de negócio.</p>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <h3>Suporte ao usuário</h3>
-        <p>Atendimento, troubleshooting, documentação, análise de chamados e resolução de problemas.</p>
-      </div>
-
-      <div class="card">
-        <h3>SQL Server</h3>
-        <p>Consultas, validações, análise de dados, apoio em ERP e rotinas relacionadas a banco de dados.</p>
-      </div>
-
-      <div class="card">
-        <h3>Automação com IA</h3>
-        <p>Uso de inteligência artificial para otimizar processos, organizar fluxos e aumentar produtividade.</p>
-      </div>
-
-      <div class="card">
-        <h3>Análise de dados</h3>
-        <p>Organização, leitura e interpretação de informações para apoiar decisões mais assertivas.</p>
-      </div>
-
-      <div class="card">
-        <h3>Sistemas corporativos</h3>
-        <p>Apoio operacional e técnico em sistemas internos, ERP e ferramentas administrativas.</p>
-      </div>
-
-      <div class="card">
-        <h3>Melhoria de processos</h3>
-        <p>Identificação de gargalos, padronização de rotinas e criação de soluções simples e eficientes.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="parallax parallax-data">
-  <div class="container parallax-content">
-    <h2>Dados, sistemas e automação</h2>
-    <p>
-      A combinação entre suporte, banco de dados e IA permite criar soluções mais rápidas,
-      inteligentes e conectadas com a operação.
-    </p>
-  </div>
-</section>
-
-<section id="portfolio" class="portfolio">
-  <div class="container reveal">
-    <div class="section-title">
-      <h2>Projetos e frentes de atuação</h2>
-      <p>Exemplos de áreas onde aplico tecnologia de forma prática.</p>
-    </div>
-
-    <div class="grid">
-      <div class="card project-card">
-        <div>
-          <span class="tag">SUPORTE</span>
-          <h3>Painel administrativo</h3>
-          <p>Interface para controle de mensagens, contatos e oportunidades recebidas pelo site.</p>
-        </div>
-      </div>
-
-      <div class="card project-card">
-        <div>
-          <span class="tag">DADOS</span>
-          <h3>Consultas e validações SQL</h3>
-          <p>Apoio em banco de dados, conferência de informações e suporte a sistemas ERP.</p>
-        </div>
-      </div>
-
-      <div class="card project-card">
-        <div>
-          <span class="tag">IA</span>
-          <h3>Automação de processos</h3>
-          <p>Uso de ferramentas inteligentes para reduzir tarefas repetitivas e organizar fluxos de trabalho.</p>
+        <div class="card project-card">
+          <div>
+            <span class="tag">IA</span>
+            <h3>Automação de processos</h3>
+            <p>Uso de ferramentas inteligentes para reduzir tarefas repetitivas e organizar fluxos de trabalho.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="contact">
-  <div class="contact-container">
-    <h2>Contato</h2>
-    <p>Envie sua proposta, oportunidade ou mensagem profissional.</p>
+  <section id="contact">
+    <div class="contact-container">
+      <h2>Contato</h2>
+      <p>Envie sua proposta, oportunidade ou mensagem profissional.</p>
 
-    <div class="contact-form whatsapp-contact-card">
-  <h3>Vamos conversar?</h3>
+      <div class="contact-form whatsapp-contact-card">
+        <h3>Vamos conversar?</h3>
 
-  <p>
-    Clique no botão abaixo para falar comigo diretamente pelo WhatsApp sobre
-    oportunidades profissionais, projetos ou propostas.
-  </p>
+        <p>
+          Clique no botão abaixo para falar comigo diretamente pelo WhatsApp sobre
+          oportunidades profissionais, projetos ou propostas.
+        </p>
 
-  <a
-    class="btn whatsapp-contact-btn"
-    href="https://wa.me/5551995527630?text=Ol%C3%A1%21%20Vim%20atrav%C3%A9s%20do%20seu%20site%20e%20gostaria%20de%20conversar%20sobre%20oportunidades%20profissionais%20relacionadas%20ao%20seu%20perfil."
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Entrar em contato pelo WhatsApp
-  </a>
-</div>
-  </div>
-</section>
+        <a
+          class="btn whatsapp-contact-btn"
+          href="https://wa.me/5551995527630?text=Ol%C3%A1%21%20Vim%20atrav%C3%A9s%20do%20seu%20site%20e%20gostaria%20de%20conversar%20sobre%20oportunidades%20profissionais%20relacionadas%20ao%20seu%20perfil."
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Entrar em contato pelo WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
 
-<a class="whatsapp" href="https://wa.me/SEUNUMERO" target="_blank">💬</a>
+  <footer>
+    © 2026 Maxy Tedesco. Todos os direitos reservados.
+  </footer>
 
-<footer>
-  © 2026 Maxy Tedesco. Todos os direitos reservados.
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabaseUrl = "https://kdgjfzsimvtgckialfpe.supabase.co";
-const supabaseKey = "sb_publishable_7cJCCvrit6oMwZzJwugb6g_tgUlXw4L";
-
-const client = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-const form = document.getElementById("contactForm");
-const submitBtn = document.getElementById("submitBtn");
-const formMessage = document.getElementById("formMessage");
-
-function showMessage(type, text) {
-  formMessage.className = "message-box " + type;
-  formMessage.innerText = text;
-}
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  submitBtn.disabled = true;
-  submitBtn.innerText = "Enviando...";
-  formMessage.className = "message-box";
-  formMessage.innerText = "";
-
-  const data = {
-    name: form.name.value.trim(),
-    email: form.email.value.trim(),
-    phone: form.phone.value.trim(),
-    job_type: form.job_type.value.trim(),
-    message: form.message.value.trim()
-  };
-
-  const { error } = await client
-    .from("contacts")
-    .insert([data]);
-
-  if (error) {
-    console.error("Supabase error:", error);
-    showMessage("error", "Erro ao salvar contato. Tente novamente.");
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Enviar mensagem";
-    return;
-  }
-
-  try {
-    const emailResponse = await fetch("/api/send-email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (!emailResponse.ok) {
-      showMessage("error", "Contato salvo, mas houve erro na notificação por email.");
-      submitBtn.disabled = false;
-      submitBtn.innerText = "Enviar mensagem";
-      return;
-    }
-
-    form.reset();
-    showMessage("success", "Mensagem enviada com sucesso!");
-  } catch (err) {
-    console.error("Email API error:", err);
-    showMessage("error", "Contato salvo, mas houve erro na notificação por email.");
-  }
-
-  submitBtn.disabled = false;
-  submitBtn.innerText = "Enviar mensagem";
-});
-
-/* ANIMAÇÕES AO ROLAR */
-const animatedItems = document.querySelectorAll(".reveal, .contact-form");
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("show");
-    }
-  });
-}, {
-  threshold: 0.18
-});
-
-animatedItems.forEach(item => observer.observe(item));
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>
