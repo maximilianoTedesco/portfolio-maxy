@@ -302,6 +302,44 @@ footer {
   transform: translateY(0);
 }
 
+/* REPOSITÓRIOS */
+.repositories {
+  background: #020617;
+}
+
+.repo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 30px;
+}
+
+.repo-card {
+  display: block;
+  background: #0f172a;
+  padding: 26px;
+  border-radius: 18px;
+  text-decoration: none;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: 0.3s;
+}
+
+.repo-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(34,211,238,0.35);
+  box-shadow: 0 18px 40px rgba(34,211,238,0.08);
+}
+
+.repo-card h3 {
+  margin: 14px 0 10px;
+  font-size: 22px;
+}
+
+.repo-card p {
+  color: #cbd5e1;
+}
+
 /* RESPONSIVO */
 @media(max-width: 900px) {
   nav {
@@ -322,9 +360,11 @@ footer {
   }
 
   .about-grid,
-  .grid {
-    grid-template-columns: 1fr;
-  }
+    .grid,
+    .form-grid,
+    .repo-grid {
+      grid-template-columns: 1fr;
+    }
 
   .parallax {
     background-attachment: scroll;
